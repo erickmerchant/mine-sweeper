@@ -90,6 +90,7 @@ export default function mineSweeper(host, attributes) {
 			})
 			.on("click", revealSquare(col, row))
 			.on("mousedown", toggleFlagDelayed(col, row))
+			.on("touchstart", toggleFlagDelayed(col, row))
 			.on("contextmenu", toggleFlagImmediately(col, row))
 			.on("keydown", moveFocus(col, row))
 			.text(() => {
