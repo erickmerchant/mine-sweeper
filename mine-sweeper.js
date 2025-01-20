@@ -89,8 +89,8 @@ export default function mineSweeper(host, attributes) {
 				}, {}),
 			})
 			.on("click", revealSquare(col, row))
-			.on("mousedown", toggleFlag(col, row))
-			.on("contextmenu", toggleFlagImmediate(col, row))
+			.on("mousedown", toggleFlagDelayed(col, row))
+			.on("contextmenu", toggleFlagImmediately(col, row))
 			.on("keydown", moveFocus(col, row))
 			.text(() => {
 				if (!square.isRevealed) {
@@ -220,7 +220,7 @@ export default function mineSweeper(host, attributes) {
 		};
 	}
 
-	function toggleFlag(x, y) {
+	function toggleFlagDelayed(x, y) {
 		return (e) => {
 			if (state.playState !== PLAY_STATES.PLAYING) {
 				return;
@@ -242,7 +242,7 @@ export default function mineSweeper(host, attributes) {
 		};
 	}
 
-	function toggleFlagImmediate(x, y) {
+	function toggleFlagImmediately(x, y) {
 		return (e) => {
 			if (state.playState !== PLAY_STATES.PLAYING) {
 				return;
