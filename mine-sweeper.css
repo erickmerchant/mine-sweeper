@@ -17,7 +17,8 @@
 	place-items: center;
 	font-family: ui-monospace, monospace;
 	font-weight: bold;
-	width: calc(2.5em * var(--width));
+	font-size: calc((min(80cqmin, calc(50px * var(--width))) / 100) * 5);
+	inline-size: 20em;
 }
 
 button {
@@ -26,11 +27,10 @@ button {
 	appearance: none;
 	background-color: oklch(80% 0 0);
 	border: 0.3em outset oklch(90% 0 0);
-	font-size: 1em;
 	font-weight: bold;
 	aspect-ratio: 1;
-	height: 100%;
-	width: 100%;
+	block-size: 100%;
+	inline-size: 100%;
 
 	&:where(.revealed) {
 		background-color: oklch(90% 0 0);
@@ -38,35 +38,35 @@ button {
 	}
 
 	&:where(.armed-adjacent-count--1) {
-		color: oklch(50% 0.4 240);
+		color: oklch(50% 0.4 260);
 	}
 
 	&:where(.armed-adjacent-count--2) {
-		color: oklch(50% 0.4 270);
+		color: oklch(50% 0.4 215);
 	}
 
 	&:where(.armed-adjacent-count--3) {
-		color: oklch(50% 0.4 300);
+		color: oklch(50% 0.4 170);
 	}
 
 	&:where(.armed-adjacent-count--4) {
-		color: oklch(50% 0.4 330);
+		color: oklch(50% 0.4 125);
 	}
 
 	&:where(.armed-adjacent-count--5) {
-		color: oklch(50% 0.4 0);
+		color: oklch(50% 0.4 80);
 	}
 
 	&:where(.armed-adjacent-count--6) {
-		color: oklch(50% 0.4 30);
+		color: oklch(50% 0.4 35);
 	}
 
 	&:where(.armed-adjacent-count--7) {
-		color: oklch(50% 0.4 60);
+		color: oklch(50% 0.4 350);
 	}
 
 	&:where(.armed-adjacent-count--8) {
-		color: oklch(50% 0 0);
+		color: oklch(50% 0.4 305);
 	}
 
 	&:where(.flagged.revealed:not(.armed-state)) {

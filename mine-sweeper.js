@@ -43,6 +43,9 @@ export default function mineSweeper(host, attributes) {
 			range(height).map((row) =>
 				div()
 					.attr("role", "row")
+					.aria({
+						rowindex: row + 1,
+					})
 					.nodes(range(width).map((col) => cell(row, col)))
 			)
 		);
@@ -62,6 +65,8 @@ export default function mineSweeper(host, attributes) {
 			isRevealed: false,
 			isArmed: false,
 			armedAdjacentCount: 0,
+			mouseDownStartTime: Infinity,
+			mouseDownTimeout: null,
 		});
 
 		gameBoard.set(`${col} ${row}`, square);
@@ -84,7 +89,8 @@ export default function mineSweeper(host, attributes) {
 				}, {}),
 			})
 			.on("click", revealSquare(col, row))
-			.on("contextmenu", toggleFlag(col, row))
+			.on("mousedown", toggleFlag(col, row))
+			.on("contextmenu", toggleFlagImmediate(col, row))
 			.on("keydown", moveFocus(col, row))
 			.text(() => {
 				if (!square.isRevealed) {
@@ -107,8 +113,7 @@ export default function mineSweeper(host, attributes) {
 		return div()
 			.attr("role", "gridcell")
 			.aria({
-				rowindex: row,
-				colindex: col,
+				colindex: col + 1,
 			})
 			.nodes(btn);
 	}
@@ -121,88 +126,128 @@ export default function mineSweeper(host, attributes) {
 		return () => {
 			let square = gameBoard.get(`${x} ${y}`);
 
-			if (state.playState !== PLAY_STATES.PLAYING) {
-				return;
-			}
-
-			if (hiddenCount === height * width) {
-				let armed = [...gameBoard.values()].map((s) => ({
-					square: s,
-					order: s === square ? 2 : Math.random(),
-				}));
-
-				armed.sort((a, b) => a.order - b.order);
-
-				armed = armed.splice(0, mineCount);
-
-				for (let {square} of armed) {
-					square.isArmed = true;
-
-					for (let adjacent of getAdjacent(square.x, square.y)) {
-						adjacent.armedAdjacentCount += 1;
-					}
+			if (Date.now() - square.mouseDownStartTime < 1_000) {
+				if (state.playState !== PLAY_STATES.PLAYING) {
+					return;
 				}
 
-				state.playState = PLAY_STATES.PLAYING;
+				if (hiddenCount === height * width) {
+					let armed = [...gameBoard.values()].map((s) => ({
+						square: s,
+						order: s === square ? 2 : Math.random(),
+					}));
 
-				startTime = Date.now();
-				timeInterval = setInterval(updateTime, 250);
-			}
+					armed.sort((a, b) => a.order - b.order);
 
-			if (!square.isFlagged) {
-				square.isRevealed = true;
+					armed = armed.splice(0, mineCount);
 
-				hiddenCount -= 1;
+					for (let {square} of armed) {
+						square.isArmed = true;
 
-				if (square.isArmed) {
-					state.playState = PLAY_STATES.LOST;
-
-					clearInterval(timeInterval);
-
-					for (let square of gameBoard.values()) {
-						if (!(square.isFlagged && square.isArmed)) {
-							square.isRevealed = true;
+						for (let adjacent of getAdjacent(square.x, square.y)) {
+							adjacent.armedAdjacentCount += 1;
 						}
 					}
-				} else {
-					if (!square.isFlagged && square.armedAdjacentCount === 0) {
-						let current = getAdjacent(x, y);
 
-						do {
-							let next = [];
+					state.playState = PLAY_STATES.PLAYING;
 
-							for (let square of current) {
-								if (!square || square.isRevealed) {
-									continue;
+					startTime = Date.now();
+					timeInterval = setInterval(updateTime, 250);
+				}
+
+				if (!square.isFlagged) {
+					square.isRevealed = true;
+
+					hiddenCount -= 1;
+
+					if (square.isArmed) {
+						state.playState = PLAY_STATES.LOST;
+
+						clearInterval(timeInterval);
+
+						for (let square of gameBoard.values()) {
+							if (!(square.isFlagged && square.isArmed)) {
+								square.isRevealed = true;
+							}
+						}
+					} else {
+						if (!square.isFlagged && square.armedAdjacentCount === 0) {
+							let current = getAdjacent(x, y);
+
+							do {
+								let next = [];
+
+								for (let square of current) {
+									if (!square || square.isRevealed) {
+										continue;
+									}
+
+									if (!square?.isArmed && !square?.isFlagged) {
+										square.isRevealed = true;
+
+										hiddenCount -= 1;
+
+										if (square.armedAdjacentCount === 0) {
+											next.push(...getAdjacent(square.x, square.y));
+										}
+									}
 								}
 
-								if (!square?.isArmed && !square?.isFlagged) {
-									square.isRevealed = true;
+								current = next;
+							} while (current.length > 0);
+						}
 
-									hiddenCount -= 1;
+						if (hiddenCount === mineCount) {
+							state.playState = PLAY_STATES.WON;
 
-									if (square.armedAdjacentCount === 0) {
-										next.push(...getAdjacent(square.x, square.y));
-									}
+							for (let square of gameBoard.values()) {
+								if (square.isArmed) {
+									square.isFlagged = true;
 								}
 							}
 
-							current = next;
-						} while (current.length > 0);
-					}
+							state.flagCount = 0;
 
-					if (hiddenCount === mineCount) {
-						state.playState = PLAY_STATES.WON;
-
-						clearInterval(timeInterval);
+							clearInterval(timeInterval);
+						}
 					}
 				}
 			}
+
+			square.mouseDownStartTime = Infinity;
+
+			clearTimeout(square.mouseDownTimeout);
 		};
 	}
 
 	function toggleFlag(x, y) {
 		return (e) => {
+			if (state.playState !== PLAY_STATES.PLAYING) {
+				return;
+			}
+
+			let square = gameBoard.get(`${x} ${y}`);
+
+			e.preventDefault();
+
+			square.mouseDownStartTime = Date.now();
+
+			square.mouseDownTimeout = setTimeout(() => {
+				if (!square.isRevealed) {
+					square.isFlagged = !square.isFlagged;
+
+					state.flagCount += square.isFlagged ? -1 : 1;
+				}
+			}, 1_000);
+		};
+	}
+
+	function toggleFlagImmediate(x, y) {
+		return (e) => {
+			if (state.playState !== PLAY_STATES.PLAYING) {
+				return;
+			}
+
 			let square = gameBoard.get(`${x} ${y}`);
 
 			e.preventDefault();
@@ -212,6 +257,10 @@ export default function mineSweeper(host, attributes) {
 
 				state.flagCount += square.isFlagged ? -1 : 1;
 			}
+
+			square.mouseDownStartTime = Infinity;
+
+			clearTimeout(square.mouseDownTimeout);
 		};
 	}
 
