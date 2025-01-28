@@ -1,4 +1,8 @@
-import {watch, effect, define, html} from "vanilla-kit";
+import {watch, effect, html, define} from "vanilla-kit/prelude/wc.js";
+import "vanilla-kit/element/aria.js";
+import "vanilla-kit/element/classes.js";
+import "vanilla-kit/element/observe.js";
+import "vanilla-kit/element/styles.js";
 
 let {div, button} = html;
 
@@ -8,12 +12,13 @@ const PLAY_STATES = {
 	WON: 2,
 };
 
-define("mine-sweeper")
-	.attributes("height", "width", "mine-count")
-	.connected((host, attr) => {
-		let height = +attr("height");
-		let width = +attr("width");
-		let mineCount = +attr("mine-count");
+define("mine-sweeper").connected((host) => {
+	let observed = host.observe();
+
+	effect(() => {
+		let height = +observed.attr("height");
+		let width = +observed.attr("width");
+		let mineCount = +observed.attr("mine-count");
 		let state = watch({
 			playState: PLAY_STATES.PLAYING,
 			time: 0,
@@ -312,6 +317,7 @@ define("mine-sweeper")
 			return result;
 		}
 	});
+});
 
 function range(n) {
 	return [...Array(n).keys()];
