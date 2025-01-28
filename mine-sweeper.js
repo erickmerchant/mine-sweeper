@@ -62,7 +62,9 @@ define("mine-sweeper").connected((host) => {
 			"--height": height,
 		});
 
-		host.shadow("open").nodes(infoPanel, board);
+		let shadow = host.shadow("open");
+
+		shadow.nodes(...shadow.deref().children, infoPanel, board);
 
 		function cell(row, col) {
 			let square = watch({
