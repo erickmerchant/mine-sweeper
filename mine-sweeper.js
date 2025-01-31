@@ -1,14 +1,15 @@
-import {watch, effect, html} from "vanilla-kit/lib.js";
-import {define} from "vanilla-kit/define.js";
-import "vanilla-kit/element/aria.js";
-import "vanilla-kit/element/attr.js";
-import "vanilla-kit/element/classes.js";
-import "vanilla-kit/element/nodes.js";
-import "vanilla-kit/element/observe.js";
-import "vanilla-kit/element/on.js";
-import "vanilla-kit/element/shadow.js";
-import "vanilla-kit/element/styles.js";
-import "vanilla-kit/element/text.js";
+import {html} from "handcraft/dom.js";
+import {watch, effect} from "handcraft/reactivity.js";
+import {define} from "handcraft/define.js";
+import "handcraft/element/aria.js";
+import "handcraft/element/attr.js";
+import "handcraft/element/classes.js";
+import "handcraft/element/nodes.js";
+import "handcraft/element/observe.js";
+import "handcraft/element/on.js";
+import "handcraft/element/shadow.js";
+import "handcraft/element/styles.js";
+import "handcraft/element/text.js";
 
 let {div, button} = html;
 
