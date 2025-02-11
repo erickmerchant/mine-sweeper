@@ -4,6 +4,7 @@ import {define} from "handcraft/define.js";
 import "handcraft/element/aria.js";
 import "handcraft/element/attr.js";
 import "handcraft/element/classes.js";
+import "handcraft/element/effect.js";
 import "handcraft/element/nodes.js";
 import "handcraft/element/observe.js";
 import "handcraft/element/on.js";
@@ -71,7 +72,7 @@ define("mine-sweeper").connected((host) => {
 
 		let shadow = host.shadow();
 
-		shadow.nodes(...shadow.deref().children, infoPanel, board);
+		shadow.nodes(infoPanel, board);
 
 		function cell(row, col) {
 			let square = watch({
@@ -120,13 +121,12 @@ define("mine-sweeper").connected((host) => {
 								? "💥"
 								: square.armedAdjacentCount || "";
 					}
+				})
+				.effect((el) => {
+					if (state.hasFocus?.[0] === col && state.hasFocus?.[1] === row) {
+						el.focus();
+					}
 				});
-
-			effect(() => {
-				if (state.hasFocus?.[0] === col && state.hasFocus?.[1] === row) {
-					btn.deref().focus();
-				}
-			});
 
 			return div()
 				.attr("role", "gridcell")
