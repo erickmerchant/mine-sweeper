@@ -105,12 +105,6 @@ define("mine-sweeper").connected((host) => {
 						return classes;
 					}, {}),
 				})
-				.on("click", revealSquare(col, row))
-				.on("touchend", revealSquare(col, row))
-				.on("mousedown", toggleFlagDelayed(col, row))
-				.on("touchstart", toggleFlagDelayed(col, row))
-				.on("contextmenu", toggleFlagImmediately(col, row))
-				.on("keydown", moveFocus(col, row))
 				.text(() => {
 					if (!square.isRevealed) {
 						return square.isFlagged ? "🚩" : "";
@@ -118,10 +112,16 @@ define("mine-sweeper").connected((host) => {
 						return square.isFlagged && !square.isArmed
 							? "❌"
 							: square.isArmed
-								? "💥"
-								: square.armedAdjacentCount || "";
+							? "💥"
+							: square.armedAdjacentCount || "";
 					}
 				})
+				.on("click", revealSquare(col, row))
+				.on("touchend", revealSquare(col, row))
+				.on("mousedown", toggleFlagDelayed(col, row))
+				.on("touchstart", toggleFlagDelayed(col, row))
+				.on("contextmenu", toggleFlagImmediately(col, row))
+				.on("keydown", moveFocus(col, row))
 				.effect((el) => {
 					if (state.hasFocus?.[0] === col && state.hasFocus?.[1] === row) {
 						el.focus();
