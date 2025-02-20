@@ -12,7 +12,7 @@ import "handcraft/element/shadow.js";
 import "handcraft/element/styles.js";
 import "handcraft/element/text.js";
 
-let {div, button} = html;
+let {div: DIV, button: BUTTON} = html;
 
 const PLAY_STATES = {
 	PLAYING: 0,
@@ -39,16 +39,16 @@ define("mine-sweeper").connected((host) => {
 		let gameBoard = new Map();
 		let adjacentMap = new Map();
 
-		let infoPanel = div()
+		let infoPanel = DIV()
 			.classes("info-panel")
 			.nodes(
-				div().text(() => `🚩 ${state.flagCount}`),
-				div()
+				DIV().text(() => `🚩 ${state.flagCount}`),
+				DIV()
 					.aria({live: "polite"})
 					.text(() => ["", "💀", "🎉"][state.playState]),
-				div().text(() => `⏱️ ${state.time}`)
+				DIV().text(() => `⏱️ ${state.time}`)
 			);
-		let board = div()
+		let board = DIV()
 			.aria({
 				rowcount: height,
 				colcount: width,
@@ -56,7 +56,7 @@ define("mine-sweeper").connected((host) => {
 			.attr("role", "grid")
 			.nodes(
 				range(height).map((row) =>
-					div()
+					DIV()
 						.attr("role", "row")
 						.aria({
 							rowindex: row + 1,
@@ -88,7 +88,7 @@ define("mine-sweeper").connected((host) => {
 
 			gameBoard.set(`${col} ${row}`, square);
 
-			let btn = button()
+			let btn = BUTTON()
 				.attr("type", "button")
 				.styles({
 					"--column": col + 1,
@@ -128,7 +128,7 @@ define("mine-sweeper").connected((host) => {
 					}
 				});
 
-			return div()
+			return DIV()
 				.attr("role", "gridcell")
 				.aria({
 					colindex: col + 1,
