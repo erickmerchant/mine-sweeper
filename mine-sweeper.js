@@ -86,7 +86,7 @@ define("mine-sweeper").connected((host) => {
 				mouseDownTimeout: null,
 			});
 
-			gameBoard.set(`${col} ${row}`, square);
+			gameBoard.set(row * width + col, square);
 
 			let btn = BUTTON()
 				.attr("type", "button")
@@ -142,7 +142,7 @@ define("mine-sweeper").connected((host) => {
 
 		function revealSquare(x, y) {
 			return () => {
-				let square = gameBoard.get(`${x} ${y}`);
+				let square = gameBoard.get(y * width + x);
 
 				if (Date.now() - square.mouseDownStartTime < 1_000) {
 					if (state.playState !== PLAY_STATES.PLAYING) {
@@ -244,7 +244,7 @@ define("mine-sweeper").connected((host) => {
 					return;
 				}
 
-				let square = gameBoard.get(`${x} ${y}`);
+				let square = gameBoard.get(y * width + x);
 
 				e.preventDefault();
 
@@ -266,7 +266,7 @@ define("mine-sweeper").connected((host) => {
 					return;
 				}
 
-				let square = gameBoard.get(`${x} ${y}`);
+				let square = gameBoard.get(y * width + x);
 
 				e.preventDefault();
 
@@ -297,20 +297,31 @@ define("mine-sweeper").connected((host) => {
 		}
 
 		function getAdjacent(x, y) {
-			let key = `${x} ${y}`;
+			let key = y * width + x;
 			let result = adjacentMap.get(key);
 
 			if (!result) {
-				result = [
-					`${x - 1} ${y - 1}`,
-					`${x} ${y - 1}`,
-					`${x + 1} ${y - 1}`,
-					`${x - 1} ${y}`,
-					`${x + 1} ${y}`,
-					`${x - 1} ${y + 1}`,
-					`${x} ${y + 1}`,
-					`${x + 1} ${y + 1}`,
-				].reduce((results, key) => {
+				result = [];
+
+				let bases = [y * width, (y + 1) * width];
+
+				if (y > 0) {
+					bases.push((y - 1) * width);
+				}
+
+				for (let base of bases) {
+					if (x > 0) {
+						result.push(base + x - 1);
+					}
+
+					result.push(base + x);
+
+					if (x < width - 1) {
+						result.push(base + x + 1);
+					}
+				}
+
+				result = result.reduce((results, key) => {
 					let square = gameBoard.get(key);
 
 					if (square) {
