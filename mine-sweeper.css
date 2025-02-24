@@ -34,47 +34,47 @@ button {
 	inline-size: 100%;
 	user-select: none;
 	-webkit-user-select: none;
+}
 
-	&:where(.revealed) {
-		background-color: oklch(90% 0 0);
-		border-color: oklch(0% 0 0 / 0);
-	}
+button:where(.revealed) {
+	background-color: oklch(90% 0 0);
+	border-color: oklch(0% 0 0 / 0);
+}
 
-	&:where(.armed-adjacent-count--1) {
-		color: oklch(50% 0.4 260);
-	}
+button:where(.armed-adjacent-count--1) {
+	color: oklch(50% 0.4 260);
+}
 
-	&:where(.armed-adjacent-count--2) {
-		color: oklch(50% 0.4 215);
-	}
+button:where(.armed-adjacent-count--2) {
+	color: oklch(50% 0.4 215);
+}
 
-	&:where(.armed-adjacent-count--3) {
-		color: oklch(50% 0.4 170);
-	}
+button:where(.armed-adjacent-count--3) {
+	color: oklch(50% 0.4 170);
+}
 
-	&:where(.armed-adjacent-count--4) {
-		color: oklch(50% 0.4 125);
-	}
+button:where(.armed-adjacent-count--4) {
+	color: oklch(50% 0.4 125);
+}
 
-	&:where(.armed-adjacent-count--5) {
-		color: oklch(50% 0.4 80);
-	}
+button:where(.armed-adjacent-count--5) {
+	color: oklch(50% 0.4 80);
+}
 
-	&:where(.armed-adjacent-count--6) {
-		color: oklch(50% 0.4 35);
-	}
+button:where(.armed-adjacent-count--6) {
+	color: oklch(50% 0.4 35);
+}
 
-	&:where(.armed-adjacent-count--7) {
-		color: oklch(50% 0.4 350);
-	}
+button:where(.armed-adjacent-count--7) {
+	color: oklch(50% 0.4 350);
+}
 
-	&:where(.armed-adjacent-count--8) {
-		color: oklch(50% 0.4 305);
-	}
+button:where(.armed-adjacent-count--8) {
+	color: oklch(50% 0.4 305);
+}
 
-	&:where(.flagged.revealed:not(.armed-state)) {
-		--content: ;
-	}
+button:where(:not(.armed-state).flagged.revealed) {
+	--content: ;
 }
 
 .info-panel {
