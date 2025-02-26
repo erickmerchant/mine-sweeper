@@ -1,16 +1,16 @@
 import {html} from "handcraft/dom.js";
 import {watch, effect} from "handcraft/reactivity.js";
 import {define} from "handcraft/define.js";
-import "handcraft/element/aria.js";
-import "handcraft/element/attr.js";
-import "handcraft/element/classes.js";
-import "handcraft/element/effect.js";
-import "handcraft/element/nodes.js";
-import "handcraft/element/observe.js";
-import "handcraft/element/on.js";
-import "handcraft/element/shadow.js";
-import "handcraft/element/styles.js";
-import "handcraft/element/text.js";
+import "handcraft/dom/aria.js";
+import "handcraft/dom/attr.js";
+import "handcraft/dom/classes.js";
+import "handcraft/dom/effect.js";
+import "handcraft/dom/nodes.js";
+import "handcraft/dom/observe.js";
+import "handcraft/dom/on.js";
+import "handcraft/dom/shadow.js";
+import "handcraft/dom/styles.js";
+import "handcraft/dom/text.js";
 
 let {div: DIV, button: BUTTON} = html;
 
@@ -200,7 +200,7 @@ define("mine-sweeper").connected((host) => {
 											continue;
 										}
 
-										if (!square?.isArmed && !square?.isFlagged) {
+										if (!square.isArmed && !square.isFlagged) {
 											square.isRevealed = true;
 
 											hiddenCount -= 1;
