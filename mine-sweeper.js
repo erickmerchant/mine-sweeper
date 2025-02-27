@@ -46,7 +46,7 @@ define("mine-sweeper").connected((host) => {
 				DIV()
 					.aria({live: "polite"})
 					.text(() => ["", "💀", "🎉"][state.playState]),
-				DIV().text(() => `⏱️ ${state.time}`)
+				DIV().text(() => `${state.time} ⏱️`)
 			);
 		let board = DIV()
 			.aria({

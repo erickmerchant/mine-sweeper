@@ -13,7 +13,9 @@
 
 :host {
 	display: grid;
-	background-color: oklch(99.9% 0 0);
+	background-color: oklch(95% 0 0);
+	padding: 0.5rem;
+	border-radius: 0.25rem;
 	margin: 0;
 	place-items: center;
 	font-family: ui-monospace, monospace;
@@ -79,8 +81,8 @@ button:where(:not(.armed-state).flagged.revealed) {
 
 .info-panel {
 	display: flex;
-	padding-block: 1em;
-	padding-inline: 0.3em;
+	padding-block: 0 0.5rem;
+	padding-inline: 0.5rem;
 	flex-wrap: wrap;
 	gap: 1em;
 	justify-content: space-between;
