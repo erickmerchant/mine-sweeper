@@ -15,32 +15,36 @@
 	display: grid;
 	background-color: oklch(95% 0 0);
 	padding: 0.5rem;
-	border-radius: 0.25rem;
+	border-radius: 0.75rem;
 	margin: 0;
 	place-items: center;
 	font-family: ui-monospace, monospace;
 	font-weight: bold;
 	font-size: calc((min(80cqmin, calc(50px * var(--width))) / 100) * 5);
-	inline-size: 20em;
+	inline-size: 25rem;
 }
 
 button {
+	display: grid;
+	place-content: center;
 	grid-column: var(--column);
 	grid-row: var(--row);
 	appearance: none;
-	background-color: oklch(80% 0 0);
-	border: 0.3em outset oklch(90% 0 0);
+	background-color: oklch(85% 0 0);
+	border: 0.375rem outset oklch(90% 0 0);
 	font-weight: bold;
 	aspect-ratio: 1;
 	block-size: 100%;
 	inline-size: 100%;
+	cursor: pointer;
 	user-select: none;
 	-webkit-user-select: none;
 }
 
 button:where(.revealed) {
-	background-color: oklch(90% 0 0);
-	border-color: oklch(0% 0 0 / 0);
+	background-color: oklch(95% 0 0);
+	border-width: 0;
+	cursor: default;
 }
 
 button:where(.armed-adjacent-count--1) {
@@ -84,18 +88,20 @@ button:where(:not(.armed-state).flagged.revealed) {
 	padding-block: 0 0.5rem;
 	padding-inline: 0.5rem;
 	flex-wrap: wrap;
-	gap: 1em;
+	gap: 1rem;
 	justify-content: space-between;
 	width: 100%;
 }
 
 [role="grid"] {
 	display: grid;
-	background-color: oklch(80% 0 0);
 	grid-auto-rows: auto;
 	grid-template-columns: repeat(var(--width), 1fr);
 	gap: 1px;
 	width: 100%;
+	background-color: oklch(85% 0 0);
+	border: 1px solid oklch(85% 0 0);
+	border-radius: 0.25rem;
 }
 
 [role="row"] {
