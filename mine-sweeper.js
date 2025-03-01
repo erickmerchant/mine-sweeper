@@ -1,6 +1,3 @@
-import {html} from "handcraft/dom.js";
-import {watch, effect} from "handcraft/reactivity.js";
-import {define} from "handcraft/define.js";
 import "handcraft/dom/aria.js";
 import "handcraft/dom/attr.js";
 import "handcraft/dom/classes.js";
@@ -11,6 +8,9 @@ import "handcraft/dom/on.js";
 import "handcraft/dom/shadow.js";
 import "handcraft/dom/styles.js";
 import "handcraft/dom/text.js";
+import {html} from "handcraft/dom.js";
+import {watch, effect} from "handcraft/reactivity.js";
+import {define} from "handcraft/define.js";
 
 let {div: DIV, button: BUTTON} = html;
 
