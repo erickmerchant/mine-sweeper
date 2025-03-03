@@ -41,45 +41,45 @@ button {
 	-webkit-user-select: none;
 }
 
-button:where(.revealed) {
+.revealed {
 	background-color: oklch(95% 0 0);
 	border-width: 0;
 	cursor: default;
 }
 
-button:where(.armed-adjacent-count--1) {
+.armed-adjacent-count--1 {
 	color: oklch(50% 0.4 260);
 }
 
-button:where(.armed-adjacent-count--2) {
+.armed-adjacent-count--2 {
 	color: oklch(50% 0.4 215);
 }
 
-button:where(.armed-adjacent-count--3) {
+.armed-adjacent-count--3 {
 	color: oklch(50% 0.4 170);
 }
 
-button:where(.armed-adjacent-count--4) {
+.armed-adjacent-count--4 {
 	color: oklch(50% 0.4 125);
 }
 
-button:where(.armed-adjacent-count--5) {
+.armed-adjacent-count--5 {
 	color: oklch(50% 0.4 80);
 }
 
-button:where(.armed-adjacent-count--6) {
+.armed-adjacent-count--6 {
 	color: oklch(50% 0.4 35);
 }
 
-button:where(.armed-adjacent-count--7) {
+.armed-adjacent-count--7 {
 	color: oklch(50% 0.4 350);
 }
 
-button:where(.armed-adjacent-count--8) {
+.armed-adjacent-count--8 {
 	color: oklch(50% 0.4 305);
 }
 
-button:where(:not(.armed-state).flagged.revealed) {
+:not(.armed-state):where(.flagged.revealed) {
 	--content: ;
 }
 
