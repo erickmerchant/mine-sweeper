@@ -1,6 +1,7 @@
 *,
 ::before,
-::after {
+::after,
+:host {
 	box-sizing: border-box;
 	max-inline-size: 100%;
 	padding: 0;
@@ -21,7 +22,7 @@
 	font-family: ui-monospace, monospace;
 	font-weight: bold;
 	font-size: calc((min(80cqmin, calc(50px * var(--width))) / 100) * 5);
-	inline-size: 25rem;
+	inline-size: min(100dvi, calc(2.5em * var(--width)));
 }
 
 button {
