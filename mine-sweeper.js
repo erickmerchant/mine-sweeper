@@ -2,7 +2,7 @@ import "handcraft/dom/aria.js";
 import "handcraft/dom/attr.js";
 import "handcraft/dom/classes.js";
 import "handcraft/dom/effect.js";
-import "handcraft/dom/nodes.js";
+import "handcraft/dom/append.js";
 import "handcraft/dom/observe.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/shadow.js";
@@ -41,7 +41,7 @@ define("mine-sweeper").connected((host) => {
 
 		let infoPanel = DIV()
 			.classes("info-panel")
-			.nodes(
+			.append(
 				DIV().text(() => `🚩 ${state.flagCount}`),
 				DIV()
 					.aria({live: "polite"})
@@ -54,14 +54,14 @@ define("mine-sweeper").connected((host) => {
 				colcount: width,
 			})
 			.attr("role", "grid")
-			.nodes(
+			.append(
 				range(height).map((row) =>
 					DIV()
 						.attr("role", "row")
 						.aria({
 							rowindex: row + 1,
 						})
-						.nodes(range(width).map((col) => cell(row, col)))
+						.append(range(width).map((col) => cell(row, col)))
 				)
 			);
 
@@ -72,7 +72,7 @@ define("mine-sweeper").connected((host) => {
 
 		let shadow = host.shadow();
 
-		shadow.nodes(infoPanel, board);
+		shadow.append(infoPanel, board);
 
 		function cell(row, col) {
 			let square = watch({
@@ -112,8 +112,8 @@ define("mine-sweeper").connected((host) => {
 						return square.isFlagged && !square.isArmed
 							? "❌"
 							: square.isArmed
-							? "💥"
-							: square.armedAdjacentCount || "";
+								? "💥"
+								: square.armedAdjacentCount || "";
 					}
 				})
 				.on("click", revealSquare(col, row))
@@ -133,7 +133,7 @@ define("mine-sweeper").connected((host) => {
 				.aria({
 					colindex: col + 1,
 				})
-				.nodes(btn);
+				.append(btn);
 		}
 
 		function updateTime() {
