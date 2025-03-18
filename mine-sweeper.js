@@ -117,10 +117,8 @@ define("mine-sweeper").connected((host) => {
 								: square.armedAdjacentCount || "";
 					}
 				})
-				.on("click", revealSquare(col, row))
-				.on("touchend", revealSquare(col, row))
-				.on("mousedown", toggleFlagDelayed(col, row))
-				.on("touchstart", toggleFlagDelayed(col, row))
+				.on(["click", "touchend"], revealSquare(col, row))
+				.on(["mousedown", "touchstart"], toggleFlagDelayed(col, row))
 				.on("contextmenu", toggleFlagImmediately(col, row))
 				.on("keydown", moveFocus(col, row))
 				.effect((el) => {
