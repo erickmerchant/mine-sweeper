@@ -172,7 +172,7 @@ define("mine-sweeper").connected((host) => {
 						timeInterval = setInterval(updateTime, 250);
 					}
 
-					if (!square.isFlagged) {
+					if (!square.isFlagged && !square.isRevealed) {
 						square.isRevealed = true;
 
 						hiddenCount -= 1;
@@ -183,7 +183,7 @@ define("mine-sweeper").connected((host) => {
 							clearInterval(timeInterval);
 
 							for (let square of gameBoard.values()) {
-								if (!(square.isFlagged && square.isArmed)) {
+								if (!square.isFlagged || !square.isArmed) {
 									square.isRevealed = true;
 								}
 							}
@@ -199,7 +199,11 @@ define("mine-sweeper").connected((host) => {
 											continue;
 										}
 
-										if (!square.isArmed && !square.isFlagged) {
+										if (
+											!square.isArmed &&
+											!square.isFlagged &&
+											!square.isRevealed
+										) {
 											square.isRevealed = true;
 
 											hiddenCount -= 1;
@@ -218,8 +222,12 @@ define("mine-sweeper").connected((host) => {
 								state.playState = PLAY_STATES.WON;
 
 								for (let square of gameBoard.values()) {
-									if (square.isArmed) {
-										square.isFlagged = true;
+									if (!square.isFlagged) {
+										if (square.isArmed) {
+											square.isFlagged = true;
+										} else {
+											square.isRevealed = true;
+										}
 									}
 								}
 
