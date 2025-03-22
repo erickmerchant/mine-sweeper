@@ -54,10 +54,12 @@ define("mine-sweeper").connected((host) => {
 				rowcount: height,
 				colcount: width,
 			})
+			.classes("grid")
 			.attr("role", "grid")
 			.append(
 				range(height).map((row) =>
 					DIV()
+						.classes("row")
 						.attr("role", "row")
 						.aria({
 							rowindex: row + 1,
@@ -90,6 +92,7 @@ define("mine-sweeper").connected((host) => {
 			gameBoard.set(row * width + col, square);
 
 			let btn = BUTTON()
+				.classes("btn")
 				.attr("type", "button")
 				.styles({
 					"--column": col + 1,

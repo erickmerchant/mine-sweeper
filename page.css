@@ -1,4 +1,4 @@
-body {
+.page {
 	display: grid;
 	block-size: 100dvb;
 	place-items: center;
