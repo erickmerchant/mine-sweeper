@@ -28,8 +28,6 @@
 .btn {
 	display: grid;
 	place-content: center;
-	grid-column: var(--column);
-	grid-row: var(--row);
 	appearance: none;
 	background-color: oklch(85% 0 0);
 	border: 0.375rem outset oklch(90% 0 0);

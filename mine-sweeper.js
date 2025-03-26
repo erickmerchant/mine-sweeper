@@ -3,11 +3,11 @@ import "handcraft/dom/append.js";
 import "handcraft/dom/aria.js";
 import "handcraft/dom/attr.js";
 import "handcraft/dom/classes.js";
+import "handcraft/dom/css.js";
 import "handcraft/dom/effect.js";
 import "handcraft/dom/observe.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/shadow.js";
-import "handcraft/dom/styles.js";
 import "handcraft/dom/text.js";
 import {html} from "handcraft/dom.js";
 import {watch, effect} from "handcraft/reactivity.js";
@@ -68,12 +68,12 @@ define("mine-sweeper").connected((host) => {
 				)
 			);
 
-		host.styles({
-			"--width": width,
-			"--height": height,
-		});
-
 		let shadow = host.shadow();
+
+		shadow.css(`:host {
+			--width: ${width};
+			--height: ${height};
+		`);
 
 		shadow.append(infoPanel, board);
 
@@ -94,10 +94,6 @@ define("mine-sweeper").connected((host) => {
 			let btn = BUTTON()
 				.classes("btn")
 				.attr("type", "button")
-				.styles({
-					"--column": col + 1,
-					"--row": row + 1,
-				})
 				.aria({label: () => (square.isRevealed ? null : "Hidden")})
 				.classes({
 					revealed: () => square.isRevealed,
