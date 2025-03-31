@@ -22,7 +22,7 @@
 	font-family: ui-monospace, monospace;
 	font-weight: bold;
 	font-size: calc((min(80cqmin, calc(50px * var(--width))) / 100) * 5);
-	inline-size: min(100dvi, calc(2.5em * var(--width)));
+	inline-size: min(100dvi, calc(2.75rem * var(--width)));
 }
 
 .btn {
