@@ -88,59 +88,8 @@ define("mine-sweeper").connected((host) => {
 				mouseDownStartTime: Infinity,
 				mouseDownTimeout: null,
 			});
-
-			gameBoard.set(row * width + col, square);
-
-			let btn = BUTTON()
-				.classes("btn")
-				.attr("type", "button")
-				.aria({label: () => (square.isRevealed ? null : "Hidden")})
-				.classes({
-					revealed: () => square.isRevealed,
-					flagged: () => square.isFlagged,
-					...range(8).reduce((classes, i) => {
-						classes[`armed-adjacent-count--${i}`] = () =>
-							square.armedAdjacentCount === i;
-
-						return classes;
-					}, {}),
-				})
-				.text(() => {
-					if (!square.isRevealed) {
-						return square.isFlagged ? "🚩" : "";
-					} else {
-						return square.isFlagged && !square.isArmed
-							? "❌"
-							: square.isArmed
-								? "💥"
-								: square.armedAdjacentCount || "";
-					}
-				})
-				.on(["click", "touchend"], revealSquare(col, row))
-				.on(["mousedown", "touchstart"], toggleFlagDelayed(col, row))
-				.on("contextmenu", toggleFlagImmediately(col, row))
-				.on("keydown", moveFocus(col, row))
-				.effect((el) => {
-					if (state.hasFocus?.[0] === col && state.hasFocus?.[1] === row) {
-						el.focus();
-					}
-				});
-
-			return DIV()
-				.attr("role", "gridcell")
-				.aria({
-					colindex: col + 1,
-				})
-				.append(btn);
-		}
-
-		function updateTime() {
-			state.time = Math.floor((Date.now() - startTime) / 1000);
-		}
-
-		function revealSquare(x, y) {
-			return () => {
-				let square = gameBoard.get(y * width + x);
+			let revealSquare = () => {
+				let square = gameBoard.get(row * width + col);
 
 				if (Date.now() - square.mouseDownStartTime < 1_000) {
 					if (state.playState !== PLAY_STATES.PLAYING) {
@@ -188,7 +137,7 @@ define("mine-sweeper").connected((host) => {
 							}
 						} else {
 							if (!square.isFlagged && square.armedAdjacentCount === 0) {
-								let current = getAdjacent(x, y);
+								let current = getAdjacent(col, row);
 
 								do {
 									let next = [];
@@ -242,15 +191,12 @@ define("mine-sweeper").connected((host) => {
 
 				clearTimeout(square.mouseDownTimeout);
 			};
-		}
-
-		function toggleFlagDelayed(x, y) {
-			return (e) => {
+			let toggleFlagDelayed = (e) => {
 				if (state.playState !== PLAY_STATES.PLAYING) {
 					return;
 				}
 
-				let square = gameBoard.get(y * width + x);
+				let square = gameBoard.get(row * width + col);
 
 				e.preventDefault();
 
@@ -264,15 +210,12 @@ define("mine-sweeper").connected((host) => {
 					}
 				}, 1_000);
 			};
-		}
-
-		function toggleFlagImmediately(x, y) {
-			return (e) => {
+			let toggleFlagImmediately = (e) => {
 				if (state.playState !== PLAY_STATES.PLAYING) {
 					return;
 				}
 
-				let square = gameBoard.get(y * width + x);
+				let square = gameBoard.get(row * width + col);
 
 				e.preventDefault();
 
@@ -286,20 +229,71 @@ define("mine-sweeper").connected((host) => {
 
 				clearTimeout(square.mouseDownTimeout);
 			};
-		}
-
-		function moveFocus(x, y) {
-			return (e) => {
+			let moveFocus = (e) => {
 				let keys = {
-					ArrowUp: y > 0 ? [x, y - 1] : [],
-					ArrowDown: y < height - 1 ? [x, y + 1] : [],
-					ArrowLeft: x > 0 ? [x - 1, y] : y > 0 ? [width - 1, y - 1] : [],
+					ArrowUp: row > 0 ? [col, row - 1] : [],
+					ArrowDown: row < height - 1 ? [col, row + 1] : [],
+					ArrowLeft:
+						col > 0 ? [col - 1, row] : row > 0 ? [width - 1, row - 1] : [],
 					ArrowRight:
-						x < width - 1 ? [x + 1, y] : y < height - 1 ? [0, y + 1] : [],
+						col < width - 1
+							? [col + 1, row]
+							: row < height - 1
+								? [0, row + 1]
+								: [],
 				};
 
 				state.hasFocus = keys?.[e.key] ?? [];
 			};
+			let focus = (el) => {
+				if (state.hasFocus?.[0] === col && state.hasFocus?.[1] === row) {
+					el.focus();
+				}
+			};
+
+			gameBoard.set(row * width + col, square);
+
+			let btn = BUTTON()
+				.classes("btn")
+				.attr("type", "button")
+				.aria({label: () => (square.isRevealed ? null : "Hidden")})
+				.classes({
+					revealed: () => square.isRevealed,
+					flagged: () => square.isFlagged,
+					...range(8).reduce((classes, i) => {
+						classes[`armed-adjacent-count--${i}`] = () =>
+							square.armedAdjacentCount === i;
+
+						return classes;
+					}, {}),
+				})
+				.text(() => {
+					if (!square.isRevealed) {
+						return square.isFlagged ? "🚩" : "";
+					} else {
+						return square.isFlagged && !square.isArmed
+							? "❌"
+							: square.isArmed
+								? "💥"
+								: square.armedAdjacentCount || "";
+					}
+				})
+				.on(["click", "touchend"], revealSquare)
+				.on(["mousedown", "touchstart"], toggleFlagDelayed)
+				.on("contextmenu", toggleFlagImmediately)
+				.on("keydown", moveFocus)
+				.effect(focus);
+
+			return DIV()
+				.attr("role", "gridcell")
+				.aria({
+					colindex: col + 1,
+				})
+				.append(btn);
+		}
+
+		function updateTime() {
+			state.time = Math.floor((Date.now() - startTime) / 1000);
 		}
 
 		function getAdjacent(x, y) {
