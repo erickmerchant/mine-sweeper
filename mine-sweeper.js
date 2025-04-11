@@ -39,7 +39,6 @@ define("mine-sweeper").connected((host) => {
 		let hiddenCount = height * width;
 		let gameBoard = new Map();
 		let adjacentMap = new Map();
-
 		let infoPanel = DIV()
 			.classes("info-panel")
 			.append(
@@ -67,7 +66,6 @@ define("mine-sweeper").connected((host) => {
 						.append(range(width).map((col) => cell(row, col)))
 				)
 			);
-
 		let shadow = host.shadow();
 
 		shadow.css(`:host {
