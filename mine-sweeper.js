@@ -276,8 +276,8 @@ define("mine-sweeper").connected((host) => {
 								: square.armedAdjacentCount || "";
 					}
 				})
-				.on(["click", "touchend"], revealSquare)
-				.on(["mousedown", "touchstart"], toggleFlagDelayed)
+				.on("click touchend", revealSquare)
+				.on("mousedown touchstart", toggleFlagDelayed)
 				.on("contextmenu", toggleFlagImmediately)
 				.on("keydown", moveFocus)
 				.effect(focus);
