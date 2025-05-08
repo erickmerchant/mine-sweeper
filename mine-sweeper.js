@@ -10,7 +10,7 @@ import {h} from "handcraft/dom.js";
 import {watch, effect} from "handcraft/reactivity.js";
 import {define} from "handcraft/define.js";
 
-let {div: DIV, button: BUTTON} = h.html;
+let {div, button} = h.html;
 
 const PLAY_STATES = {
 	PLAYING: 0,
@@ -36,19 +36,21 @@ define("mine-sweeper").connected((host) => {
 		let hiddenCount = height * width;
 		let gameBoard = new Map();
 		let adjacentMap = new Map();
-		let infoPanel = DIV.classes("info-panel")(
-			DIV.text(() => `🚩 ${state.flagCount}`),
-			DIV.aria({live: "polite"}).text(() => ["", "💀", "🎉"][state.playState]),
-			DIV.text(() => `${state.time} ⏱️`)
+		let infoPanel = div.classes("info-panel")(
+			div.text(() => `🚩 ${state.flagCount}`),
+			div.aria({live: "polite"}).text(() => ["", "💀", "🎉"][state.playState]),
+			div.text(() => `${state.time} ⏱️`)
 		);
-		let board = DIV.aria({
-			rowcount: height,
-			colcount: width,
-		})
+		let board = div
+			.aria({
+				rowcount: height,
+				colcount: width,
+			})
 			.classes("grid")
 			.role("grid")(
 			range(height).map((row) =>
-				DIV.classes("row")
+				div
+					.classes("row")
 					.role("row")
 					.aria({
 						rowindex: row + 1,
@@ -240,7 +242,8 @@ define("mine-sweeper").connected((host) => {
 
 			gameBoard.set(row * width + col, square);
 
-			let btn = BUTTON.classes("btn")
+			let btn = button
+				.classes("btn")
 				.type("button")
 				.aria({label: () => (square.isRevealed ? null : "Hidden")})
 				.classes({
@@ -270,7 +273,7 @@ define("mine-sweeper").connected((host) => {
 				.on("keydown", moveFocus)
 				.effect(focus);
 
-			return DIV.role("gridcell").aria({
+			return div.role("gridcell").aria({
 				colindex: col + 1,
 			})(btn);
 		}
