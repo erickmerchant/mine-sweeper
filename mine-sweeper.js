@@ -243,10 +243,9 @@ define("mine-sweeper").connected((host) => {
 			gameBoard.set(row * width + col, square);
 
 			let btn = button
-				.classes("btn")
 				.type("button")
 				.aria({label: () => (square.isRevealed ? null : "Hidden")})
-				.classes({
+				.classes("btn", {
 					revealed: () => square.isRevealed,
 					flagged: () => square.isFlagged,
 					...range(8).reduce((classes, i) => {
