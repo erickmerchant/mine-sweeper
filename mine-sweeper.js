@@ -1,7 +1,4 @@
-import "handcraft/dom/_nodes.js";
-import "handcraft/dom/append.js";
 import "handcraft/dom/aria.js";
-import "handcraft/dom/attr.js";
 import "handcraft/dom/classes.js";
 import "handcraft/dom/css.js";
 import "handcraft/dom/effect.js";
@@ -9,11 +6,11 @@ import "handcraft/dom/observe.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/shadow.js";
 import "handcraft/dom/text.js";
-import {html} from "handcraft/dom.js";
+import {h} from "handcraft/dom.js";
 import {watch, effect} from "handcraft/reactivity.js";
 import {define} from "handcraft/define.js";
 
-let {div: DIV, button: BUTTON} = html;
+let {div: DIV, button: BUTTON} = h.html;
 
 const PLAY_STATES = {
 	PLAYING: 0,
@@ -39,33 +36,25 @@ define("mine-sweeper").connected((host) => {
 		let hiddenCount = height * width;
 		let gameBoard = new Map();
 		let adjacentMap = new Map();
-		let infoPanel = DIV()
-			.classes("info-panel")
-			.append(
-				DIV().text(() => `🚩 ${state.flagCount}`),
-				DIV()
-					.aria({live: "polite"})
-					.text(() => ["", "💀", "🎉"][state.playState]),
-				DIV().text(() => `${state.time} ⏱️`)
-			);
-		let board = DIV()
-			.aria({
-				rowcount: height,
-				colcount: width,
-			})
+		let infoPanel = DIV.classes("info-panel")(
+			DIV.text(() => `🚩 ${state.flagCount}`),
+			DIV.aria({live: "polite"}).text(() => ["", "💀", "🎉"][state.playState]),
+			DIV.text(() => `${state.time} ⏱️`)
+		);
+		let board = DIV.aria({
+			rowcount: height,
+			colcount: width,
+		})
 			.classes("grid")
-			.attr("role", "grid")
-			.append(
-				range(height).map((row) =>
-					DIV()
-						.classes("row")
-						.attr("role", "row")
-						.aria({
-							rowindex: row + 1,
-						})
-						.append(range(width).map((col) => cell(row, col)))
-				)
-			);
+			.role("grid")(
+			range(height).map((row) =>
+				DIV.classes("row")
+					.role("row")
+					.aria({
+						rowindex: row + 1,
+					})(range(width).map((col) => cell(row, col)))
+			)
+		);
 		let shadow = host.shadow();
 
 		shadow.css(`:host {
@@ -73,7 +62,7 @@ define("mine-sweeper").connected((host) => {
 			--height: ${height};
 		`);
 
-		shadow.append(infoPanel, board);
+		shadow(infoPanel, board);
 
 		function cell(row, col) {
 			let square = watch({
@@ -237,8 +226,8 @@ define("mine-sweeper").connected((host) => {
 						col < width - 1
 							? [col + 1, row]
 							: row < height - 1
-								? [0, row + 1]
-								: [],
+							? [0, row + 1]
+							: [],
 				};
 
 				state.hasFocus = keys?.[e.key] ?? [];
@@ -251,9 +240,8 @@ define("mine-sweeper").connected((host) => {
 
 			gameBoard.set(row * width + col, square);
 
-			let btn = BUTTON()
-				.classes("btn")
-				.attr("type", "button")
+			let btn = BUTTON.classes("btn")
+				.type("button")
 				.aria({label: () => (square.isRevealed ? null : "Hidden")})
 				.classes({
 					revealed: () => square.isRevealed,
@@ -272,8 +260,8 @@ define("mine-sweeper").connected((host) => {
 						return square.isFlagged && !square.isArmed
 							? "❌"
 							: square.isArmed
-								? "💥"
-								: square.armedAdjacentCount || "";
+							? "💥"
+							: square.armedAdjacentCount || "";
 					}
 				})
 				.on("click touchend", revealSquare)
@@ -282,12 +270,9 @@ define("mine-sweeper").connected((host) => {
 				.on("keydown", moveFocus)
 				.effect(focus);
 
-			return DIV()
-				.attr("role", "gridcell")
-				.aria({
-					colindex: col + 1,
-				})
-				.append(btn);
+			return DIV.role("gridcell").aria({
+				colindex: col + 1,
+			})(btn);
 		}
 
 		function updateTime() {
