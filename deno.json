@@ -1,5 +1,5 @@
 {
-  "vendor": true,
+  "nodeModulesDir": "auto",
   "imports": {
     "handcraft": "npm:handcraft@next"
   }
