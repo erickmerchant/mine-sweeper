@@ -5,7 +5,6 @@ import "handcraft/dom/effect.js";
 import "handcraft/dom/observe.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/shadow.js";
-import "handcraft/dom/text.js";
 import {h} from "handcraft/dom.js";
 import {watch, effect} from "handcraft/reactivity.js";
 import {define} from "handcraft/define.js";
@@ -37,9 +36,9 @@ define("mine-sweeper").connected((host) => {
 		let gameBoard = new Map();
 		let adjacentMap = new Map();
 		let infoPanel = div.classes("info-panel")(
-			div.text(() => `🚩 ${state.flagCount}`),
-			div.aria({live: "polite"}).text(() => ["", "💀", "🎉"][state.playState]),
-			div.text(() => `${state.time} ⏱️`)
+			div(() => `🚩 ${state.flagCount}`),
+			div.aria({live: "polite"})(() => ["", "💀", "🎉"][state.playState]),
+			div(() => `${state.time} ⏱️`)
 		);
 		let board = div
 			.aria({
@@ -255,22 +254,21 @@ define("mine-sweeper").connected((host) => {
 						return classes;
 					}, {}),
 				})
-				.text(() => {
-					if (!square.isRevealed) {
-						return square.isFlagged ? "🚩" : "";
-					} else {
-						return square.isFlagged && !square.isArmed
-							? "❌"
-							: square.isArmed
-							? "💥"
-							: square.armedAdjacentCount || "";
-					}
-				})
 				.on("click touchend", revealSquare)
 				.on("mousedown touchstart", toggleFlagDelayed)
 				.on("contextmenu", toggleFlagImmediately)
 				.on("keydown", moveFocus)
-				.effect(focus);
+				.effect(focus)(() => {
+				if (!square.isRevealed) {
+					return square.isFlagged ? "🚩" : "";
+				} else {
+					return square.isFlagged && !square.isArmed
+						? "❌"
+						: square.isArmed
+						? "💥"
+						: square.armedAdjacentCount || "";
+				}
+			});
 
 			return div.role("gridcell").aria({
 				colindex: col + 1,
