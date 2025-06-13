@@ -1,11 +1,11 @@
 {
   "version": "5",
   "specifiers": {
-    "npm:handcraft@next": "0.17.0-beta.12"
+    "npm:handcraft@next": "0.17.0-beta.13"
   },
   "npm": {
-    "handcraft@0.17.0-beta.12": {
-      "integrity": "sha512-/HA2Snf6BZnyJ/yvhaOmlJGrBUVrLp5xatnT85U6E7TRffDwFfFokQXvRNH3RSN5O491iUwD4XfEtX+6Bd+sgg=="
+    "handcraft@0.17.0-beta.13": {
+      "integrity": "sha512-fME87+HL/C9ZANSOcn0y2L+G0OxOF1HFSk+t/PWBeadsn3nHMGH8+xfPGmaQmHe1J3eiqK1mMy4Hbf4NNPmdwA=="
     }
   },
   "workspace": {
