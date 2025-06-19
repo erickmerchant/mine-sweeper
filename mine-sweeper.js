@@ -1,8 +1,10 @@
 import "handcraft/dom/aria.js";
+import "handcraft/dom/attr.js";
 import "handcraft/dom/classes.js";
 import "handcraft/dom/css.js";
 import "handcraft/dom/effect.js";
-import "handcraft/dom/attr.js";
+import "handcraft/dom/nodes.js";
+import "handcraft/dom/observer.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/shadow.js";
 import {h} from "handcraft/dom.js";
@@ -241,8 +243,8 @@ define("mine-sweeper").connected((host) => {
 					col < state.width - 1
 						? [col + 1, row]
 						: row < state.height - 1
-						? [0, row + 1]
-						: [],
+							? [0, row + 1]
+							: [],
 			};
 
 			state.hasFocus = keys?.[e.key] ?? [];
@@ -279,8 +281,8 @@ define("mine-sweeper").connected((host) => {
 				return square.isFlagged && !square.isArmed
 					? "❌"
 					: square.isArmed
-					? "💥"
-					: square.armedAdjacentCount || "";
+						? "💥"
+						: square.armedAdjacentCount || "";
 			}
 		});
 
