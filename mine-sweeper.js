@@ -19,7 +19,7 @@ const PLAY_STATES = {
 	WON: 2,
 };
 
-define("mine-sweeper").connected((host) => {
+define("mine-sweeper").setup((host) => {
 	let state = watch({
 			playState: PLAY_STATES.PLAYING,
 			time: 0,
