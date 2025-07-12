@@ -8,6 +8,6 @@
 		}
 	},
 	"imports": {
-		"handcraft": "npm:handcraft@next"
+		"handcraft": "npm:handcraft"
 	}
 }
