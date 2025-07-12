@@ -1,6 +1,13 @@
 {
-  "nodeModulesDir": "auto",
-  "imports": {
-    "handcraft": "npm:handcraft@next"
-  }
+	"tasks": {
+		"build": "deno bundle --platform browser --minify -o mine-sweeper.min.js mine-sweeper.js",
+		"dev:app": "deno bundle --watch --platform browser --minify -o mine-sweeper.min.js mine-sweeper.js",
+		"dev:styles": "coolstyleserver serve -p3000 .",
+		"dev": {
+			"dependencies": ["dev:app", "dev:styles"]
+		}
+	},
+	"imports": {
+		"handcraft": "npm:handcraft@next"
+	}
 }

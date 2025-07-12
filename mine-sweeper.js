@@ -11,7 +11,7 @@ import {h} from "handcraft/dom.js";
 import {watch, effect} from "handcraft/reactivity.js";
 import {define} from "handcraft/define.js";
 
-let {div, button} = h.html;
+const {div, button} = h.html;
 
 const PLAY_STATES = {
 	PLAYING: 0,
@@ -48,6 +48,7 @@ define("mine-sweeper").setup((host) => {
 		state.startTime = null;
 		state.timeInterval = null;
 	});
+
 	let infoPanel = div.classes("info-panel")(
 		div(() => `🚩 ${state.flagCount}`),
 		div.aria({live: "polite"})(() => ["", "💀", "🎉"][state.playState]),
@@ -59,24 +60,21 @@ define("mine-sweeper").setup((host) => {
 				rowcount: state.height,
 				colcount: state.width,
 			})
-			.classes("grid")
-			.role("grid")(
+			.role("grid")
+			.classes("grid")(
 			range(state.height).map((row) =>
 				div
-					.classes("row")
-					.role("row")
 					.aria({
 						rowindex: row + 1,
-					})(range(state.width).map((col) => cell(row, col)))
+					})
+					.role("row")
+					.classes("row")(range(state.width).map((col) => cell(row, col)))
 			)
 		);
 	let shadow = host.shadow();
 
 	shadow.css(
-		() => `:host {
-			--width: ${state.width};
-			--height: ${state.height};
-		`
+		() => `:host { --width: ${state.width}; --height: ${state.height};`
 	);
 
 	shadow(infoPanel, board);
@@ -93,8 +91,6 @@ define("mine-sweeper").setup((host) => {
 			mouseDownTimeout: null,
 		});
 		let revealSquare = () => {
-			let square = gameBoard.get(row * state.width + col);
-
 			if (Date.now() - square.mouseDownStartTime < 1_000) {
 				if (state.playState !== PLAY_STATES.PLAYING) {
 					return;
@@ -200,8 +196,6 @@ define("mine-sweeper").setup((host) => {
 				return;
 			}
 
-			let square = gameBoard.get(row * state.width + col);
-
 			e.preventDefault();
 
 			square.mouseDownStartTime = Date.now();
@@ -218,8 +212,6 @@ define("mine-sweeper").setup((host) => {
 			if (state.playState !== PLAY_STATES.PLAYING) {
 				return;
 			}
-
-			let square = gameBoard.get(row * state.width + col);
 
 			e.preventDefault();
 
