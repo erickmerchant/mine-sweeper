@@ -7,11 +7,11 @@ import "handcraft/dom/nodes.js";
 import "handcraft/dom/observer.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/shadow.js";
-import {h} from "handcraft/dom.js";
-import {watch, effect} from "handcraft/reactivity.js";
-import {define} from "handcraft/define.js";
+import { h } from "handcraft/dom.js";
+import { effect, watch } from "handcraft/reactivity.js";
+import { define } from "handcraft/define.js";
 
-const {div, button} = h.html;
+const { div, button } = h.html;
 
 const PLAY_STATES = {
 	PLAYING: 0,
@@ -51,8 +51,8 @@ define("mine-sweeper").setup((host) => {
 
 	let infoPanel = div.classes("info-panel")(
 		div(() => `🚩 ${state.flagCount}`),
-		div.aria({live: "polite"})(() => ["", "💀", "🎉"][state.playState]),
-		div(() => `${state.time} ⏱️`)
+		div.aria({ live: "polite" })(() => ["", "💀", "🎉"][state.playState]),
+		div(() => `${state.time} ⏱️`),
 	);
 	let board = () =>
 		div
@@ -62,19 +62,19 @@ define("mine-sweeper").setup((host) => {
 			})
 			.role("grid")
 			.classes("grid")(
-			range(state.height).map((row) =>
-				div
-					.aria({
-						rowindex: row + 1,
-					})
-					.role("row")
-					.classes("row")(range(state.width).map((col) => cell(row, col)))
-			)
-		);
+				range(state.height).map((row) =>
+					div
+						.aria({
+							rowindex: row + 1,
+						})
+						.role("row")
+						.classes("row")(range(state.width).map((col) => cell(row, col)))
+				),
+			);
 	let shadow = host.shadow();
 
 	shadow.css(
-		() => `:host { --width: ${state.width}; --height: ${state.height};`
+		() => `:host { --width: ${state.width}; --height: ${state.height};`,
 	);
 
 	shadow(infoPanel, board);
@@ -106,7 +106,7 @@ define("mine-sweeper").setup((host) => {
 
 					armed = armed.splice(0, state.mineCount);
 
-					for (let {square} of armed) {
+					for (let { square } of armed) {
 						square.isArmed = true;
 
 						for (let adjacent of getAdjacent(square.x, square.y)) {
@@ -229,14 +229,16 @@ define("mine-sweeper").setup((host) => {
 			let keys = {
 				ArrowUp: row > 0 ? [col, row - 1] : [],
 				ArrowDown: row < state.height - 1 ? [col, row + 1] : [],
-				ArrowLeft:
-					col > 0 ? [col - 1, row] : row > 0 ? [state.width - 1, row - 1] : [],
-				ArrowRight:
-					col < state.width - 1
-						? [col + 1, row]
-						: row < state.height - 1
-							? [0, row + 1]
-							: [],
+				ArrowLeft: col > 0
+					? [col - 1, row]
+					: row > 0
+					? [state.width - 1, row - 1]
+					: [],
+				ArrowRight: col < state.width - 1
+					? [col + 1, row]
+					: row < state.height - 1
+					? [0, row + 1]
+					: [],
 			};
 
 			state.hasFocus = keys?.[e.key] ?? [];
@@ -251,7 +253,7 @@ define("mine-sweeper").setup((host) => {
 
 		let btn = button
 			.type("button")
-			.aria({label: () => (square.isRevealed ? null : "Hidden")})
+			.aria({ label: () => (square.isRevealed ? null : "Hidden") })
 			.classes("btn", {
 				revealed: () => square.isRevealed,
 				flagged: () => square.isFlagged,
@@ -267,16 +269,16 @@ define("mine-sweeper").setup((host) => {
 			.on("contextmenu", toggleFlagImmediately)
 			.on("keydown", moveFocus)
 			.effect(focus)(() => {
-			if (!square.isRevealed) {
-				return square.isFlagged ? "🚩" : "";
-			} else {
-				return square.isFlagged && !square.isArmed
-					? "❌"
-					: square.isArmed
+				if (!square.isRevealed) {
+					return square.isFlagged ? "🚩" : "";
+				} else {
+					return square.isFlagged && !square.isArmed
+						? "❌"
+						: square.isArmed
 						? "💥"
 						: square.armedAdjacentCount || "";
-			}
-		});
+				}
+			});
 
 		return div.role("gridcell").aria({
 			colindex: col + 1,
