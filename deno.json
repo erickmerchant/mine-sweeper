@@ -1,10 +1,10 @@
 {
 	"tasks": {
-		"build": "deno bundle --platform browser --minify -o mine-sweeper.min.js mine-sweeper.js",
-		"dev:app": "deno bundle --watch --platform browser --minify -o mine-sweeper.min.js mine-sweeper.js",
-		"dev:styles": "coolstyleserver serve -p3000 .",
+		"bundle": "deno bundle --platform browser --minify -o mine-sweeper.min.js mine-sweeper.js",
+		"dev:bundle": "deno bundle --watch --platform browser --minify -o mine-sweeper.min.js mine-sweeper.js",
+		"dev:serve": "coolstyleserver serve -p3000 .",
 		"dev": {
-			"dependencies": ["dev:app", "dev:styles"]
+			"dependencies": ["dev:bundle", "dev:serve"]
 		}
 	},
 	"imports": {
