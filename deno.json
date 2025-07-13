@@ -9,5 +9,8 @@
 	},
 	"imports": {
 		"handcraft": "npm:handcraft"
+	},
+	"fmt": {
+		"useTabs": true
 	}
 }
