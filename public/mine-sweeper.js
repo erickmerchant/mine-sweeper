@@ -38,9 +38,9 @@ define("mine-sweeper").setup((host) => {
 
 		state.height = +host.attr("height");
 		state.width = +host.attr("width");
-		state.mineCount = +host.attr("mine-count");
-		state.flagCount = state.mineCount;
-		state.hiddenCount = state.height * state.width;
+		state.count = +host.attr("count");
+		state.flags = state.count;
+		state.hidden = state.height * state.width;
 
 		state.playState = PLAY_STATES.PLAYING;
 		state.time = 0;
@@ -50,7 +50,7 @@ define("mine-sweeper").setup((host) => {
 	});
 
 	let infoPanel = div.classes("info-panel")(
-		div(() => `🚩 ${state.flagCount}`),
+		div(() => `🚩 ${state.flags}`),
 		div.aria({ live: "polite" })(() => ["", "💀", "🎉"][state.playState]),
 		div(() => `${state.time} ⏱️`),
 	);
@@ -96,7 +96,7 @@ define("mine-sweeper").setup((host) => {
 					return;
 				}
 
-				if (state.hiddenCount === state.height * state.width) {
+				if (state.hidden === state.height * state.width) {
 					let armed = [...gameBoard.values()].map((s) => ({
 						square: s,
 						order: s === square ? 2 : Math.random(),
@@ -104,7 +104,7 @@ define("mine-sweeper").setup((host) => {
 
 					armed.sort((a, b) => a.order - b.order);
 
-					armed = armed.splice(0, state.mineCount);
+					armed = armed.splice(0, state.count);
 
 					for (let { square } of armed) {
 						square.isArmed = true;
@@ -123,7 +123,7 @@ define("mine-sweeper").setup((host) => {
 				if (!square.isFlagged && !square.isRevealed) {
 					square.isRevealed = true;
 
-					state.hiddenCount -= 1;
+					state.hidden -= 1;
 
 					if (square.isArmed) {
 						state.playState = PLAY_STATES.LOST;
@@ -154,7 +154,7 @@ define("mine-sweeper").setup((host) => {
 									) {
 										square.isRevealed = true;
 
-										state.hiddenCount -= 1;
+										state.hidden -= 1;
 
 										if (square.armedAdjacentCount === 0) {
 											next.push(...getAdjacent(square.x, square.y));
@@ -166,7 +166,7 @@ define("mine-sweeper").setup((host) => {
 							} while (current.length > 0);
 						}
 
-						if (state.hiddenCount === state.mineCount) {
+						if (state.hidden === state.count) {
 							state.playState = PLAY_STATES.WON;
 
 							for (let square of gameBoard.values()) {
@@ -179,7 +179,7 @@ define("mine-sweeper").setup((host) => {
 								}
 							}
 
-							state.flagCount = 0;
+							state.flags = 0;
 
 							clearInterval(state.timeInterval);
 						}
@@ -204,7 +204,7 @@ define("mine-sweeper").setup((host) => {
 				if (!square.isRevealed) {
 					square.isFlagged = !square.isFlagged;
 
-					state.flagCount += square.isFlagged ? -1 : 1;
+					state.flags += square.isFlagged ? -1 : 1;
 				}
 			}, 1_000);
 		};
@@ -218,7 +218,7 @@ define("mine-sweeper").setup((host) => {
 			if (!square.isRevealed) {
 				square.isFlagged = !square.isFlagged;
 
-				state.flagCount += square.isFlagged ? -1 : 1;
+				state.flags += square.isFlagged ? -1 : 1;
 			}
 
 			square.mouseDownStartTime = Infinity;

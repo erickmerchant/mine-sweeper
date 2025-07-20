@@ -1,13 +1,14 @@
 {
 	"tasks": {
-		"bundle": "deno bundle --platform browser --minify -o mine-sweeper.min.js mine-sweeper.js",
-		"dev:bundle": "deno bundle --watch --platform browser --minify -o mine-sweeper.min.js mine-sweeper.js",
-		"dev:serve": "coolstyleserver serve -p3000 .",
-		"dev": {
-			"dependencies": ["dev:bundle", "dev:serve"]
+		"dev": "deno run -A flint.ts dev 3000",
+		"build": "deno run -A flint.ts build",
+		"stage": {
+			"command": "deno serve -A --port=3000 dist/serve.ts",
+			"dependencies": ["build"]
 		}
 	},
 	"imports": {
+		"@flint/framework": "jsr:@flint/framework@^0.1.6",
 		"handcraft": "npm:handcraft"
 	},
 	"fmt": {
