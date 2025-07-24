@@ -106,3 +106,10 @@
 .row {
 	display: contents;
 }
+
+.blank {
+	background-color: oklch(95% 0 0);
+	aspect-ratio: 1;
+	block-size: 100%;
+	inline-size: 100%;
+}

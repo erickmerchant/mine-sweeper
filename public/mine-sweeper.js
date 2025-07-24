@@ -11,7 +11,7 @@ import { h } from "handcraft/dom.js";
 import { effect, watch } from "handcraft/reactivity.js";
 import { define } from "handcraft/define.js";
 
-const { div, button } = h.html;
+const { div, button, span } = h.html;
 
 const PLAY_STATES = {
 	PLAYING: 0,
@@ -36,9 +36,11 @@ define("mine-sweeper").setup((host) => {
 
 		clearInterval(state.timeInterval);
 
-		state.height = +host.attr("height");
-		state.width = +host.attr("width");
-		state.count = +host.attr("count");
+		state.height = +(host.attr("height") ?? 8);
+		state.width = +(host.attr("width") ?? 8);
+		state.count = +(host.attr("count") ?? 10);
+		state.mask = host.attr("mask")?.split?.(",") ??
+			range(state.height).map(() => range(state.width).fill("1").join(""));
 		state.flags = state.count;
 		state.hidden = state.height * state.width;
 
@@ -80,6 +82,8 @@ define("mine-sweeper").setup((host) => {
 	shadow(infoPanel, board);
 
 	function cell(row, col) {
+		if (state.mask[row][col] !== "1") return span().classes("blank");
+
 		let square = watch({
 			x: col,
 			y: row,
