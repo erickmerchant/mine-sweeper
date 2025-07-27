@@ -78,7 +78,7 @@
 	color: oklch(50% 0.4 305);
 }
 
-:not(.armed-state):where(.flagged.revealed) {
+:not(.armed-state).flagged.revealed {
 	--content: ;
 }
 
