@@ -11,7 +11,7 @@ const {
 	"mine-sweeper": mineSweeper,
 } = h.html;
 
-export default function (_, resolve) {
+export default function ({ resolve }) {
 	const main = mineSweeper.count(10).height(8).width(8);
 
 	main.shadow()(
