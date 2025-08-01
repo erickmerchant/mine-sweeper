@@ -8,7 +8,7 @@
 		}
 	},
 	"imports": {
-		"@flint/framework": "jsr:@flint/framework@^0.5.1",
+		"@flint/framework": "jsr:@flint/framework@^0.6.1",
 		"handcraft": "npm:handcraft@^0.19.0"
 	},
 	"fmt": {
