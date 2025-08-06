@@ -20,15 +20,15 @@ const PLAY_STATES = {
 };
 
 define("mine-sweeper").setup((host) => {
-	let state = watch({
-			playState: PLAY_STATES.PLAYING,
-			time: 0,
-			hasFocus: [],
-			height: 0,
-			width: 0,
-		}),
-		gameBoard,
-		adjacentMap;
+	const state = watch({
+		playState: PLAY_STATES.PLAYING,
+		time: 0,
+		hasFocus: [],
+		height: 0,
+		width: 0,
+	});
+
+	let gameBoard, adjacentMap;
 
 	effect(() => {
 		gameBoard = new Map();
@@ -51,12 +51,12 @@ define("mine-sweeper").setup((host) => {
 		state.timeInterval = null;
 	});
 
-	let infoPanel = div.classes("info-panel")(
+	const infoPanel = div.classes("info-panel")(
 		div(() => `🚩 ${state.flags}`),
 		div.aria({ live: "polite" })(() => ["", "💀", "🎉"][state.playState]),
 		div(() => `${state.time} ⏱️`),
 	);
-	let board = () =>
+	const board = () =>
 		div
 			.aria({
 				rowcount: state.height,
@@ -73,7 +73,7 @@ define("mine-sweeper").setup((host) => {
 						.classes("row")(range(state.width).map((col) => cell(row, col)))
 				),
 			);
-	let shadow = host.shadow();
+	const shadow = host.shadow();
 
 	shadow.css(
 		() => `:host { --width: ${state.width}; --height: ${state.height};`,
@@ -84,7 +84,7 @@ define("mine-sweeper").setup((host) => {
 	function cell(row, col) {
 		if (state.mask[row][col] !== "1") return span().classes("blank");
 
-		let square = watch({
+		const square = watch({
 			x: col,
 			y: row,
 			isFlagged: false,
@@ -94,7 +94,7 @@ define("mine-sweeper").setup((host) => {
 			mouseDownStartTime: Infinity,
 			mouseDownTimeout: null,
 		});
-		let revealSquare = () => {
+		const revealSquare = () => {
 			if (Date.now() - square.mouseDownStartTime < 1_000) {
 				if (state.playState !== PLAY_STATES.PLAYING) {
 					return;
@@ -110,10 +110,10 @@ define("mine-sweeper").setup((host) => {
 
 					armed = armed.splice(0, state.count);
 
-					for (let { square } of armed) {
+					for (const { square } of armed) {
 						square.isArmed = true;
 
-						for (let adjacent of getAdjacent(square.x, square.y)) {
+						for (const adjacent of getAdjacent(square.x, square.y)) {
 							adjacent.armedAdjacentCount += 1;
 						}
 					}
@@ -134,7 +134,7 @@ define("mine-sweeper").setup((host) => {
 
 						clearInterval(state.timeInterval);
 
-						for (let square of gameBoard.values()) {
+						for (const square of gameBoard.values()) {
 							if (!square.isFlagged || !square.isArmed) {
 								square.isRevealed = true;
 							}
@@ -144,9 +144,9 @@ define("mine-sweeper").setup((host) => {
 							let current = getAdjacent(col, row);
 
 							do {
-								let next = [];
+								const next = [];
 
-								for (let square of current) {
+								for (const square of current) {
 									if (!square || square.isRevealed) {
 										continue;
 									}
@@ -173,7 +173,7 @@ define("mine-sweeper").setup((host) => {
 						if (state.hidden === state.count) {
 							state.playState = PLAY_STATES.WON;
 
-							for (let square of gameBoard.values()) {
+							for (const square of gameBoard.values()) {
 								if (!square.isFlagged) {
 									if (square.isArmed) {
 										square.isFlagged = true;
@@ -195,7 +195,7 @@ define("mine-sweeper").setup((host) => {
 
 			clearTimeout(square.mouseDownTimeout);
 		};
-		let toggleFlagDelayed = (e) => {
+		const toggleFlagDelayed = (e) => {
 			if (state.playState !== PLAY_STATES.PLAYING) {
 				return;
 			}
@@ -212,7 +212,7 @@ define("mine-sweeper").setup((host) => {
 				}
 			}, 1_000);
 		};
-		let toggleFlagImmediately = (e) => {
+		const toggleFlagImmediately = (e) => {
 			if (state.playState !== PLAY_STATES.PLAYING) {
 				return;
 			}
@@ -229,8 +229,8 @@ define("mine-sweeper").setup((host) => {
 
 			clearTimeout(square.mouseDownTimeout);
 		};
-		let moveFocus = (e) => {
-			let keys = {
+		const moveFocus = (e) => {
+			const keys = {
 				ArrowUp: row > 0 ? [col, row - 1] : [],
 				ArrowDown: row < state.height - 1 ? [col, row + 1] : [],
 				ArrowLeft: col > 0
@@ -247,7 +247,7 @@ define("mine-sweeper").setup((host) => {
 
 			state.hasFocus = keys?.[e.key] ?? [];
 		};
-		let focus = (el) => {
+		const focus = (el) => {
 			if (state.hasFocus?.[0] === col && state.hasFocus?.[1] === row) {
 				el.focus();
 			}
@@ -255,7 +255,7 @@ define("mine-sweeper").setup((host) => {
 
 		gameBoard.set(row * state.width + col, square);
 
-		let btn = button
+		const btn = button
 			.type("button")
 			.aria({ label: () => (square.isRevealed ? null : "Hidden") })
 			.classes("btn", {
@@ -294,19 +294,19 @@ define("mine-sweeper").setup((host) => {
 	}
 
 	function getAdjacent(x, y) {
-		let key = y * state.width + x;
+		const key = y * state.width + x;
 		let result = adjacentMap.get(key);
 
 		if (!result) {
 			result = [];
 
-			let bases = [y * state.width, (y + 1) * state.width];
+			const bases = [y * state.width, (y + 1) * state.width];
 
 			if (y > 0) {
 				bases.push((y - 1) * state.width);
 			}
 
-			for (let base of bases) {
+			for (const base of bases) {
 				if (x > 0) {
 					result.push(base + x - 1);
 				}
@@ -319,7 +319,7 @@ define("mine-sweeper").setup((host) => {
 			}
 
 			result = result.reduce((results, key) => {
-				let square = gameBoard.get(key);
+				const square = gameBoard.get(key);
 
 				if (square) {
 					results.push(square);
