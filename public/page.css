@@ -1,6 +1,6 @@
 .page {
-	display: grid;
-	block-size: 100dvb;
-	place-items: center;
-	margin: 0;
+  display: grid;
+  block-size: 100dvb;
+  place-items: center;
+  margin: 0;
 }

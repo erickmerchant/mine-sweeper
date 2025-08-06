@@ -1,17 +1,14 @@
 {
-	"tasks": {
-		"dev": "deno run -A --watch flint.ts dev --port=3000",
-		"build": "deno run -A flint.ts build",
-		"stage": {
-			"command": "deno serve -A --port=3000 dist/serve.ts",
-			"dependencies": ["build"]
-		}
-	},
-	"imports": {
-		"@flint/framework": "jsr:@flint/framework@^0.7.0",
-		"handcraft": "npm:handcraft@^0.19.0"
-	},
-	"fmt": {
-		"useTabs": true
-	}
+  "tasks": {
+    "dev": "deno run -A --watch flint.ts dev --port=3000",
+    "build": "deno run -A flint.ts build",
+    "stage": {
+      "command": "deno serve -A --port=3000 dist/serve.ts",
+      "dependencies": ["build"]
+    }
+  },
+  "imports": {
+    "@flint/framework": "jsr:@flint/framework@^0.7.0",
+    "handcraft": "npm:handcraft@^0.19.0"
+  }
 }
