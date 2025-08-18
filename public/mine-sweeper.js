@@ -1,15 +1,4 @@
-import "handcraft/dom/aria.js";
-import "handcraft/dom/attr.js";
-import "handcraft/dom/classes.js";
-import "handcraft/dom/css.js";
-import "handcraft/dom/effect.js";
-import "handcraft/dom/nodes.js";
-import "handcraft/dom/observer.js";
-import "handcraft/dom/on.js";
-import "handcraft/dom/shadow.js";
-import { h } from "handcraft/dom.js";
-import { effect, watch } from "handcraft/reactivity.js";
-import { define } from "handcraft/define.js";
+import { define, effect, h, shadow, watch } from "@handcraft/lib";
 
 const { div, button, span } = h.html;
 
@@ -51,11 +40,12 @@ define("mine-sweeper").setup((host) => {
     state.timeInterval = null;
   });
 
-  const infoPanel = div.classes("info-panel")(
+  const infoPanel = div.class("info-panel")(
     div(() => `🚩 ${state.flags}`),
     div.aria({ live: "polite" })(() => ["", "💀", "🎉"][state.playState]),
     div(() => `${state.time} ⏱️`),
   );
+
   const board = () =>
     div
       .aria({
@@ -63,26 +53,25 @@ define("mine-sweeper").setup((host) => {
         colcount: state.width,
       })
       .role("grid")
-      .classes("grid")(
-        range(state.height).map((row) =>
+      .class("grid")(
+        ...range(state.height).map((row) =>
           div
             .aria({
               rowindex: row + 1,
             })
             .role("row")
-            .classes("row")(range(state.width).map((col) => cell(row, col)))
+            .class("row")(...range(state.width).map((col) => cell(row, col)))
         ),
       );
-  const shadow = host.shadow();
 
-  shadow.css(
-    () => `:host { --width: ${state.width}; --height: ${state.height};`,
+  host(
+    shadow().css(
+      () => `:host { --width: ${state.width}; --height: ${state.height};`,
+    )(infoPanel, board),
   );
 
-  shadow(infoPanel, board);
-
   function cell(row, col) {
-    if (state.mask[row][col] !== "1") return span().classes("blank");
+    if (state.mask[row][col] !== "1") return span().class("blank");
 
     const square = watch({
       x: col,
@@ -258,7 +247,7 @@ define("mine-sweeper").setup((host) => {
     const btn = button
       .type("button")
       .aria({ label: () => (square.isRevealed ? null : "Hidden") })
-      .classes("btn", {
+      .class("btn", {
         revealed: () => square.isRevealed,
         flagged: () => square.isFlagged,
         ...range(8).reduce((classes, i) => {
