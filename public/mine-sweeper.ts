@@ -1,5 +1,16 @@
 import { define, effect, h, shadow, watch } from "@handcraft/lib";
 
+type Square = {
+  x: number;
+  y: number;
+  isFlagged: boolean;
+  isRevealed: boolean;
+  isArmed: boolean;
+  armedAdjacentCount: number;
+  mouseDownStartTime: number;
+  mouseDownTimeout?: number | null;
+};
+
 const { div, button, span } = h.html;
 
 const PLAY_STATES = {
@@ -9,27 +20,47 @@ const PLAY_STATES = {
 };
 
 define("mine-sweeper").setup((host) => {
-  const state = watch({
+  const state: {
+    playState: number;
+    time: number;
+    hasFocus: Array<number>;
+    height: number;
+    width: number;
+    timeInterval?: number | null;
+    startTime?: number | null;
+    count: number;
+    flags: number;
+    hidden: number;
+    mask: Array<string>;
+  } = watch({
     playState: PLAY_STATES.PLAYING,
     time: 0,
     hasFocus: [],
     height: 0,
     width: 0,
+    count: 0,
+    flags: 0,
+    mask: [],
+    hidden: 0,
   });
 
-  let gameBoard, adjacentMap;
+  let gameBoard: Map<number, Square>, adjacentMap: Map<number, Array<Square>>;
 
   effect(() => {
     gameBoard = new Map();
     adjacentMap = new Map();
 
-    clearInterval(state.timeInterval);
+    if (state.timeInterval) {
+      clearInterval(state.timeInterval);
+    }
 
     state.height = +(host.attr("height") ?? 8);
     state.width = +(host.attr("width") ?? 8);
     state.count = +(host.attr("count") ?? 10);
     state.mask = host.attr("mask")?.split?.(",") ??
-      range(state.height).map(() => range(state.width).fill("1").join(""));
+      range(state.height).map(() =>
+        range<string>(state.width).fill("1").join("")
+      );
     state.flags = state.count;
     state.hidden = state.height * state.width;
 
@@ -70,10 +101,10 @@ define("mine-sweeper").setup((host) => {
     )(infoPanel, board),
   );
 
-  function cell(row, col) {
+  function cell(row: number, col: number) {
     if (state.mask[row][col] !== "1") return span().class("blank");
 
-    const square = watch({
+    const square = watch<Square>({
       x: col,
       y: row,
       isFlagged: false,
@@ -121,7 +152,9 @@ define("mine-sweeper").setup((host) => {
           if (square.isArmed) {
             state.playState = PLAY_STATES.LOST;
 
-            clearInterval(state.timeInterval);
+            if (state.timeInterval) {
+              clearInterval(state.timeInterval);
+            }
 
             for (const square of gameBoard.values()) {
               if (!square.isFlagged || !square.isArmed) {
@@ -174,7 +207,9 @@ define("mine-sweeper").setup((host) => {
 
               state.flags = 0;
 
-              clearInterval(state.timeInterval);
+              if (state.timeInterval) {
+                clearInterval(state.timeInterval);
+              }
             }
           }
         }
@@ -182,9 +217,11 @@ define("mine-sweeper").setup((host) => {
 
       square.mouseDownStartTime = Infinity;
 
-      clearTimeout(square.mouseDownTimeout);
+      if (square.mouseDownTimeout) {
+        clearTimeout(square.mouseDownTimeout);
+      }
     };
-    const toggleFlagDelayed = (e) => {
+    const toggleFlagDelayed = (e: Event) => {
       if (state.playState !== PLAY_STATES.PLAYING) {
         return;
       }
@@ -201,7 +238,7 @@ define("mine-sweeper").setup((host) => {
         }
       }, 1_000);
     };
-    const toggleFlagImmediately = (e) => {
+    const toggleFlagImmediately = (e: Event) => {
       if (state.playState !== PLAY_STATES.PLAYING) {
         return;
       }
@@ -216,10 +253,12 @@ define("mine-sweeper").setup((host) => {
 
       square.mouseDownStartTime = Infinity;
 
-      clearTimeout(square.mouseDownTimeout);
+      if (square.mouseDownTimeout) {
+        clearTimeout(square.mouseDownTimeout);
+      }
     };
-    const moveFocus = (e) => {
-      const keys = {
+    const moveFocus = (e: KeyboardEvent) => {
+      const keys: Record<string, Array<number>> = {
         ArrowUp: row > 0 ? [col, row - 1] : [],
         ArrowDown: row < state.height - 1 ? [col, row + 1] : [],
         ArrowLeft: col > 0
@@ -236,7 +275,7 @@ define("mine-sweeper").setup((host) => {
 
       state.hasFocus = keys?.[e.key] ?? [];
     };
-    const focus = (el) => {
+    const focus = (el: HTMLElement) => {
       if (state.hasFocus?.[0] === col && state.hasFocus?.[1] === row) {
         el.focus();
       }
@@ -250,7 +289,7 @@ define("mine-sweeper").setup((host) => {
       .class("btn", {
         revealed: () => square.isRevealed,
         flagged: () => square.isFlagged,
-        ...range(8).reduce((classes, i) => {
+        ...range(8).reduce<Record<string, () => boolean>>((classes, i) => {
           classes[`armed-adjacent-count--${i}`] = () =>
             square.armedAdjacentCount === i;
 
@@ -260,7 +299,7 @@ define("mine-sweeper").setup((host) => {
       .on("click touchend", revealSquare)
       .on("mousedown touchstart", toggleFlagDelayed)
       .on("contextmenu", toggleFlagImmediately)
-      .on("keydown", moveFocus)
+      .on("keydown", moveFocus as EventListener)
       .effect(focus)(() => {
         if (!square.isRevealed) {
           return square.isFlagged ? "🚩" : "";
@@ -269,7 +308,7 @@ define("mine-sweeper").setup((host) => {
             ? "❌"
             : square.isArmed
             ? "💥"
-            : square.armedAdjacentCount || "";
+            : `${square.armedAdjacentCount || ""}`;
         }
       });
 
@@ -279,15 +318,17 @@ define("mine-sweeper").setup((host) => {
   }
 
   function updateTime() {
-    state.time = Math.floor((Date.now() - state.startTime) / 1000);
+    state.time = state.startTime
+      ? Math.floor((Date.now() - state.startTime) / 1000)
+      : 0;
   }
 
-  function getAdjacent(x, y) {
+  function getAdjacent(x: number, y: number) {
     const key = y * state.width + x;
-    let result = adjacentMap.get(key);
+    let squareResult = adjacentMap.get(key);
 
-    if (!result) {
-      result = [];
+    if (!squareResult) {
+      const result: Array<number> = [];
 
       const bases = [y * state.width, (y + 1) * state.width];
 
@@ -307,7 +348,7 @@ define("mine-sweeper").setup((host) => {
         }
       }
 
-      result = result.reduce((results, key) => {
+      squareResult = result.reduce<Array<Square>>((results, key) => {
         const square = gameBoard.get(key);
 
         if (square) {
@@ -317,13 +358,13 @@ define("mine-sweeper").setup((host) => {
         return results;
       }, []);
 
-      adjacentMap.set(key, result);
+      adjacentMap.set(key, squareResult);
     }
 
-    return result;
+    return squareResult;
   }
 });
 
-function range(n) {
-  return [...Array(n).keys()];
+function range<T = number>(n: number) {
+  return [...Array(n).keys()] as Array<T>;
 }
