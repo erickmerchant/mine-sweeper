@@ -11,7 +11,7 @@ type Square = {
   mouseDownTimeout?: number | null;
 };
 
-const { div, button, span } = h.html;
+const { div, button } = h.html;
 
 const PLAY_STATES = {
   PLAYING: 0,
@@ -31,7 +31,6 @@ define("mine-sweeper").setup((host) => {
     count: number;
     flags: number;
     hidden: number;
-    mask: Array<string>;
   } = watch({
     playState: PLAY_STATES.PLAYING,
     time: 0,
@@ -40,7 +39,6 @@ define("mine-sweeper").setup((host) => {
     width: 0,
     count: 0,
     flags: 0,
-    mask: [],
     hidden: 0,
   });
 
@@ -57,10 +55,6 @@ define("mine-sweeper").setup((host) => {
     state.height = +(host.attr("height") ?? 8);
     state.width = +(host.attr("width") ?? 8);
     state.count = +(host.attr("count") ?? 10);
-    state.mask = host.attr("mask")?.split?.(",") ??
-      range(state.height).map(() =>
-        range<string>(state.width).fill("1").join("")
-      );
     state.flags = state.count;
     state.hidden = state.height * state.width;
 
@@ -102,8 +96,6 @@ define("mine-sweeper").setup((host) => {
   );
 
   function cell(row: number, col: number) {
-    if (state.mask[row][col] !== "1") return span().class("blank");
-
     const square = watch<Square>({
       x: col,
       y: row,
@@ -365,6 +357,6 @@ define("mine-sweeper").setup((host) => {
   }
 });
 
-function range<T = number>(n: number) {
-  return [...Array(n).keys()] as Array<T>;
+function range(n: number): Array<number> {
+  return [...Array(n).keys()];
 }

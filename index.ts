@@ -1,5 +1,5 @@
-import { h, render, shadow } from "@handcraft/lib";
 import type { FlintRouteContext } from "@flint/framework";
+import { h, render, shadow } from "@handcraft/lib";
 
 const {
   html,
