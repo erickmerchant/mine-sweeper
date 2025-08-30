@@ -5,9 +5,9 @@ import index from "./index.ts";
 
 const app = flint("public", "dist")
   .route("/", index)
+  .file("/page.css", css)
   .file("/mine-sweeper.js", js)
-  .file("/mine-sweeper.css", css)
-  .file("/page.css", css);
+  .file("/mine-sweeper.css", css);
 
 export default app;
 

@@ -52,9 +52,9 @@ define("mine-sweeper").setup((host) => {
       clearInterval(state.timeInterval);
     }
 
-    state.height = +(host.attr("height") ?? 8);
-    state.width = +(host.attr("width") ?? 8);
-    state.count = +(host.attr("count") ?? 10);
+    state.height = +(host.get("height") ?? 8);
+    state.width = +(host.get("width") ?? 8);
+    state.count = +(host.get("count") ?? 10);
     state.flags = state.count;
     state.hidden = state.height * state.width;
 
