@@ -13,24 +13,22 @@ const {
 } = h.html;
 
 export default function ({ resolve }: FlintRouteContext) {
-  const main = mineSweeper.count(10).height(8).width(8);
-
-  main(
-    shadow()(
-      link.rel("stylesheet").href(resolve("/mine-sweeper.css")),
-    ),
-  );
-
   return render(
     html.lang("en-US")(
       head(
         meta.charset("utf-8"),
         meta.name("viewport").content("width=device-width, initial-scale=1"),
         title("Mine-Sweeper"),
-        link.rel("stylesheet").href(resolve("/page.css")),
+        link.rel("stylesheet").href(resolve("/index.css")),
         script.type("module").src(resolve("/mine-sweeper.js")),
       ),
-      body.class("page")(main),
+      body.class("page")(
+        mineSweeper.count(10).height(8).width(8)(
+          shadow()(
+            link.rel("stylesheet").href(resolve("/mine-sweeper.css")),
+          ),
+        ),
+      ),
     ),
   );
 }

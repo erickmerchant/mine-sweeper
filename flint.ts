@@ -5,7 +5,7 @@ import index from "./src/index.ts";
 
 const app = flint("src", "dist")
   .route("/", index)
-  .file("/page.css", css)
+  .file("/index.css", css)
   .file("/mine-sweeper.js", js)
   .file("/mine-sweeper.css", css);
 
