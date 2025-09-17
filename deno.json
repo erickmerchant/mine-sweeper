@@ -8,8 +8,8 @@
     }
   },
   "imports": {
-    "@flint/framework": "jsr:@flint/framework@^0.11.0",
-    "@handcraft/lib": "jsr:@handcraft/lib@^1.4.0"
+    "@flint/framework": "jsr:@flint/framework@^0.12.2",
+    "@handcraft/lib": "jsr:@handcraft/lib@^1.4.1"
   },
   "compilerOptions": {
     "lib": ["deno.ns", "dom", "dom.iterable", "es2023"]
