@@ -8,7 +8,7 @@
     }
   },
   "imports": {
-    "@flint/framework": "jsr:@flint/framework@^0.12.2",
+    "@flint/framework": "jsr:@flint/framework@^0.13.0",
     "@handcraft/lib": "jsr:@handcraft/lib@^1.4.1"
   },
   "compilerOptions": {
