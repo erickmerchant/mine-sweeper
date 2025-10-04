@@ -1,18 +1,14 @@
 {
   "tasks": {
-    "dev:build": "deno run -A flint.ts --dev",
-    "build": "deno run -A flint.ts",
-    "dev": {
-      "command": "deno serve -A --port=4000 --watch-hmr dist/dev-serve.ts",
-      "dependencies": ["dev:build"]
-    },
+    "dev": "deno serve -A --port=4000 --watch-hmr flint.ts",
+    "build": "deno run -A flint.ts --build",
     "stage": {
       "command": "deno serve -A --port=4000 --parallel dist/serve.ts",
       "dependencies": ["build"]
     }
   },
   "imports": {
-    "@flint/framework": "jsr:@flint/framework@^0.14.1",
+    "@flint/framework": "jsr:@flint/framework@^0.15.0",
     "@handcraft/lib": "jsr:@handcraft/lib@^1.4.1"
   },
   "compilerOptions": {
