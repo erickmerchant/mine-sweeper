@@ -90,8 +90,8 @@ define("mine-sweeper").setup((host) => {
       );
 
   host(
-    shadow().css(
-      () => `:host { --width: ${state.width}; --height: ${state.height};`,
+    shadow().css(() =>
+      `:host { --width: ${state.width}; --height: ${state.height};`
     )(infoPanel, board),
   );
 

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@flint/framework@~0.15.3": "0.15.3",
+    "jsr:@flint/framework@0.16": "0.16.0",
     "jsr:@handcraft/lib@^1.4.2": "1.4.2",
     "jsr:@std/async@^1.0.15": "1.0.15",
     "jsr:@std/cli@^1.0.23": "1.0.23",
@@ -13,11 +13,12 @@
     "jsr:@std/media-types@^1.1.0": "1.1.0",
     "jsr:@std/path@^1.1.1": "1.1.2",
     "jsr:@std/path@^1.1.2": "1.1.2",
+    "npm:html-rewriter-wasm@~0.4.1": "0.4.1",
     "npm:lightningcss@^1.30.2": "1.30.2"
   },
   "jsr": {
-    "@flint/framework@0.15.3": {
-      "integrity": "f77c16d73988e3739224af61af95662c28547a44bb0ce01131ff54a50e4954c8",
+    "@flint/framework@0.16.0": {
+      "integrity": "5435dcc56e68cf17e2d19acd4ae7cb6f5dd1d9c46c40e8cb2d2eda759a25cc6e",
       "dependencies": [
         "jsr:@std/async",
         "jsr:@std/cli",
@@ -26,6 +27,7 @@
         "jsr:@std/fs",
         "jsr:@std/media-types",
         "jsr:@std/path@^1.1.2",
+        "npm:html-rewriter-wasm",
         "npm:lightningcss"
       ]
     },
@@ -67,6 +69,9 @@
   "npm": {
     "detect-libc@2.1.2": {
       "integrity": "sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ=="
+    },
+    "html-rewriter-wasm@0.4.1": {
+      "integrity": "sha512-lNovG8CMCCmcVB1Q7xggMSf7tqPCijZXaH4gL6iE8BFghdQCbaY5Met9i1x2Ex8m/cZHDUtXK9H6/znKamRP8Q=="
     },
     "lightningcss-android-arm64@1.30.2": {
       "integrity": "sha512-BH9sEdOCahSgmkVhBLeU7Hc9DWeZ1Eb6wNS6Da8igvUwAe0sqROHddIlvU06q3WyXVEOYDZ6ykBZQnjTbmo4+A==",
@@ -145,7 +150,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@flint/framework@~0.15.3",
+      "jsr:@flint/framework@0.16",
       "jsr:@handcraft/lib@^1.4.2"
     ]
   }
