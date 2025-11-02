@@ -23,7 +23,7 @@ export default function () {
       ),
       body.class("page")(
         mineSweeper.count(10).height(8).width(8)(
-          shadow()(link.rel("stylesheet").href("/mine-sweeper.css")),
+          shadow(link.rel("stylesheet").href("/mine-sweeper.css")),
         ),
       ),
     ),
