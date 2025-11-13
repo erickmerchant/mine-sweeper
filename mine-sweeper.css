@@ -6,7 +6,7 @@
   max-inline-size: 100%;
   padding: 0;
   margin: 0;
-  color: inherit;
+  color: oklch(30% 0 0);
   font: inherit;
   touch-action: none;
   -webkit-text-size-adjust: none;
@@ -15,7 +15,7 @@
 :host {
   display: grid;
   background-color: oklch(95% 0 0);
-  padding: 0.5rem;
+  padding: 1%;
   border-radius: 0.75rem;
   margin: 0;
   place-items: center;
@@ -23,6 +23,33 @@
   font-weight: bold;
   font-size: calc(min(80cqmin, calc(50px * var(--width))) / 100 * 5);
   inline-size: min(100dvi, calc(2.75rem * var(--width)));
+  gap: 1px;
+}
+
+.info-panel {
+  display: grid;
+  grid-template-columns: max-content auto max-content;
+  padding-block: 1.25% 2.5%;
+  padding-inline: 5%;
+  gap: 1rem;
+  justify-content: space-between;
+  inline-size: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-auto-rows: auto;
+  grid-template-columns: repeat(var(--width), 1fr);
+  gap: 1px;
+  inline-size: 100%;
+  background-color: oklch(60% 0 0);
+  border: 1px solid oklch(60% 0 0);
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.row {
+  display: contents;
 }
 
 .btn {
@@ -30,7 +57,7 @@
   place-content: center;
   appearance: none;
   background-color: oklch(85% 0 0);
-  border: 0.375rem outset oklch(90% 0 0);
+  border: none;
   font-weight: bold;
   aspect-ratio: 1;
   block-size: 100%;
@@ -42,8 +69,7 @@
 
 .revealed {
   background-color: oklch(95% 0 0);
-  border-width: 0;
-  cursor: default;
+  cursor: oklch(90% 0 0);
 }
 
 .armed-adjacent-count--1 {
@@ -80,36 +106,4 @@
 
 :not(.armed-state).flagged.revealed {
   --content: ;
-}
-
-.info-panel {
-  display: grid;
-  grid-template-columns: max-content auto max-content;
-  padding-block: 0 0.5rem;
-  padding-inline: 0.5rem;
-  gap: 1rem;
-  justify-content: space-between;
-  inline-size: 100%;
-}
-
-.grid {
-  display: grid;
-  grid-auto-rows: auto;
-  grid-template-columns: repeat(var(--width), 1fr);
-  gap: 1px;
-  inline-size: 100%;
-  background-color: oklch(85% 0 0);
-  border: 1px solid oklch(85% 0 0);
-  border-radius: 0.25rem;
-}
-
-.row {
-  display: contents;
-}
-
-.blank {
-  background-color: oklch(95% 0 0);
-  aspect-ratio: 1;
-  block-size: 100%;
-  inline-size: 100%;
 }
