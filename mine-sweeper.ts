@@ -6,7 +6,7 @@ type Square = {
   isFlagged: boolean;
   isRevealed: boolean;
   isArmed: boolean;
-  armedAdjacentCount: number;
+  adjacent: Array<Square>;
   mouseDownStartTime: number;
   mouseDownTimeout?: number | null;
 };
@@ -42,11 +42,10 @@ define("mine-sweeper").setup((host) => {
     hidden: 0,
   });
 
-  let gameBoard: Map<number, Square>, adjacentMap: Map<number, Array<Square>>;
+  let gameBoard: Map<number, Square>;
 
   effect(() => {
     gameBoard = new Map();
-    adjacentMap = new Map();
 
     if (state.timeInterval) {
       clearInterval(state.timeInterval);
@@ -102,7 +101,7 @@ define("mine-sweeper").setup((host) => {
       isFlagged: false,
       isRevealed: false,
       isArmed: false,
-      armedAdjacentCount: 0,
+      adjacent: [],
       mouseDownStartTime: Infinity,
       mouseDownTimeout: null,
     });
@@ -124,10 +123,6 @@ define("mine-sweeper").setup((host) => {
 
           for (const { square } of armed) {
             square.isArmed = true;
-
-            for (const adjacent of getAdjacent(square.x, square.y)) {
-              adjacent.armedAdjacentCount += 1;
-            }
           }
 
           state.playState = PLAY_STATES.PLAYING;
@@ -154,28 +149,31 @@ define("mine-sweeper").setup((host) => {
               }
             }
           } else {
-            if (!square.isFlagged && square.armedAdjacentCount === 0) {
-              let current = getAdjacent(col, row);
+            if (
+              !square.isFlagged &&
+              !square.adjacent.some((square) => square.isArmed)
+            ) {
+              let current = square.adjacent;
 
               do {
                 const next = [];
 
-                for (const square of current) {
-                  if (!square || square.isRevealed) {
+                for (const sq of current) {
+                  if (!sq || sq.isRevealed) {
                     continue;
                   }
 
                   if (
-                    !square.isArmed &&
-                    !square.isFlagged &&
-                    !square.isRevealed
+                    !sq.isArmed &&
+                    !sq.isFlagged &&
+                    !sq.isRevealed
                   ) {
-                    square.isRevealed = true;
+                    sq.isRevealed = true;
 
                     state.hidden -= 1;
 
-                    if (square.armedAdjacentCount === 0) {
-                      next.push(...getAdjacent(square.x, square.y));
+                    if (!sq.adjacent.some((square) => square.isArmed)) {
+                      next.push(...sq.adjacent);
                     }
                   }
                 }
@@ -275,6 +273,30 @@ define("mine-sweeper").setup((host) => {
 
     gameBoard.set(row * state.width + col, square);
 
+    const keys = [
+      (row - 1) * state.width + col,
+    ];
+
+    if (col - 1 >= 0) {
+      keys.push(
+        (row - 1) * state.width + (col - 1),
+        row * state.width + (col - 1),
+      );
+    }
+
+    if (col + 1 <= state.width - 1) {
+      keys.push((row - 1) * state.width + (col + 1));
+    }
+
+    for (const key of keys) {
+      const adjacent = gameBoard.get(key);
+
+      if (adjacent) {
+        square.adjacent.push(adjacent);
+        adjacent.adjacent.push(square);
+      }
+    }
+
     const btn = button
       .type("button")
       .aria({ label: () => (square.isRevealed ? null : "Hidden") })
@@ -283,7 +305,7 @@ define("mine-sweeper").setup((host) => {
         flagged: () => square.isFlagged,
         ...range(8).reduce<Record<string, () => boolean>>((classes, i) => {
           classes[`armed-adjacent-count--${i}`] = () =>
-            square.armedAdjacentCount === i;
+            square.adjacent.filter((square) => square.isArmed).length === i;
 
           return classes;
         }, {}),
@@ -300,7 +322,9 @@ define("mine-sweeper").setup((host) => {
             ? "❌"
             : square.isArmed
             ? "💥"
-            : `${square.armedAdjacentCount || ""}`;
+            : `${
+              square.adjacent.filter((square) => square.isArmed).length || ""
+            }`;
         }
       });
 
@@ -313,47 +337,6 @@ define("mine-sweeper").setup((host) => {
     state.time = state.startTime
       ? Math.floor((Date.now() - state.startTime) / 1000)
       : 0;
-  }
-
-  function getAdjacent(x: number, y: number) {
-    const key = y * state.width + x;
-    let squareResult = adjacentMap.get(key);
-
-    if (!squareResult) {
-      const result: Array<number> = [];
-
-      const bases = [y * state.width, (y + 1) * state.width];
-
-      if (y > 0) {
-        bases.push((y - 1) * state.width);
-      }
-
-      for (const base of bases) {
-        if (x > 0) {
-          result.push(base + x - 1);
-        }
-
-        result.push(base + x);
-
-        if (x < state.width - 1) {
-          result.push(base + x + 1);
-        }
-      }
-
-      squareResult = result.reduce<Array<Square>>((results, key) => {
-        const square = gameBoard.get(key);
-
-        if (square) {
-          results.push(square);
-        }
-
-        return results;
-      }, []);
-
-      adjacentMap.set(key, squareResult);
-    }
-
-    return squareResult;
   }
 });
 
