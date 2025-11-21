@@ -1,4 +1,4 @@
-import { define, effect, h, shadow, watch } from "@handcraft/lib";
+import { define, effect, h, observe, shadow, watch } from "@handcraft/lib";
 
 type Square = {
   x: number;
@@ -11,6 +11,16 @@ type Square = {
   mouseDownTimeout?: number | null;
 };
 
+type GameState = {
+  playState: number;
+  time: number;
+  hasFocus: Array<number>;
+  timeInterval?: number | null;
+  startTime?: number | null;
+  flags: number;
+  hidden: number;
+};
+
 const { div, button } = h.html;
 
 const PLAY_STATES = {
@@ -20,24 +30,15 @@ const PLAY_STATES = {
 };
 
 define("mine-sweeper").setup((host) => {
-  const state: {
-    playState: number;
-    time: number;
-    hasFocus: Array<number>;
-    height: number;
-    width: number;
-    timeInterval?: number | null;
-    startTime?: number | null;
-    count: number;
-    flags: number;
-    hidden: number;
-  } = watch({
+  const observed = observe(host);
+  const height = () => observed.height ? Number(observed.height) : 8;
+  const width = () => observed.width ? Number(observed.width) : 8;
+  const count = () => observed.count ? Number(observed.count) : 10;
+  const area = () => height() * width();
+  const state = watch<GameState>({
     playState: PLAY_STATES.PLAYING,
     time: 0,
     hasFocus: [],
-    height: 0,
-    width: 0,
-    count: 0,
     flags: 0,
     hidden: 0,
   });
@@ -51,11 +52,8 @@ define("mine-sweeper").setup((host) => {
       clearInterval(state.timeInterval);
     }
 
-    state.height = +(host.get("height") ?? 8);
-    state.width = +(host.get("width") ?? 8);
-    state.count = +(host.get("count") ?? 10);
-    state.flags = state.count;
-    state.hidden = state.height * state.width;
+    state.flags = count();
+    state.hidden = area();
 
     state.playState = PLAY_STATES.PLAYING;
     state.time = 0;
@@ -73,25 +71,28 @@ define("mine-sweeper").setup((host) => {
   const board = () =>
     div
       .aria({
-        rowcount: state.height,
-        colcount: state.width,
+        rowcount: height(),
+        colcount: width(),
       })
       .role("grid")
       .class("grid")(
-        ...range(state.height).map((row) =>
+        ...range(height()).map((row) =>
           div
             .aria({
               rowindex: row + 1,
             })
             .role("row")
-            .class("row")(...range(state.width).map((col) => cell(row, col)))
+            .class("row")(
+              ...range(width()).map((col) => cell(row, col)),
+            )
         ),
       );
 
   host(
-    shadow.css(() =>
-      `:host { --width: ${state.width}; --height: ${state.height};`
-    )(infoPanel, board),
+    shadow.css(() => `:host { --width: ${width()}; --height: ${height()};`)(
+      infoPanel,
+      board,
+    ),
   );
 
   function cell(row: number, col: number) {
@@ -105,30 +106,33 @@ define("mine-sweeper").setup((host) => {
       mouseDownStartTime: Infinity,
       mouseDownTimeout: null,
     });
+    const arm = () => {
+      let armed = [...gameBoard.values()].map((s) => ({
+        square: s,
+        order: s === square ? 2 : Math.random(),
+      }));
+
+      armed.sort((a, b) => a.order - b.order);
+
+      armed = armed.splice(0, count());
+
+      for (const { square } of armed) {
+        square.isArmed = true;
+      }
+
+      state.playState = PLAY_STATES.PLAYING;
+
+      state.startTime = Date.now();
+      state.timeInterval = setInterval(updateTime, 250);
+    };
     const revealSquare = () => {
       if (Date.now() - square.mouseDownStartTime < 1_000) {
         if (state.playState !== PLAY_STATES.PLAYING) {
           return;
         }
 
-        if (state.hidden === state.height * state.width) {
-          let armed = [...gameBoard.values()].map((s) => ({
-            square: s,
-            order: s === square ? 2 : Math.random(),
-          }));
-
-          armed.sort((a, b) => a.order - b.order);
-
-          armed = armed.splice(0, state.count);
-
-          for (const { square } of armed) {
-            square.isArmed = true;
-          }
-
-          state.playState = PLAY_STATES.PLAYING;
-
-          state.startTime = Date.now();
-          state.timeInterval = setInterval(updateTime, 250);
+        if (state.hidden === area()) {
+          arm();
         }
 
         if (!square.isFlagged && !square.isRevealed) {
@@ -182,7 +186,7 @@ define("mine-sweeper").setup((host) => {
               } while (current.length > 0);
             }
 
-            if (state.hidden === state.count) {
+            if (state.hidden === count()) {
               state.playState = PLAY_STATES.WON;
 
               for (const square of gameBoard.values()) {
@@ -250,15 +254,15 @@ define("mine-sweeper").setup((host) => {
     const moveFocus = (e: KeyboardEvent) => {
       const keys: Record<string, Array<number>> = {
         ArrowUp: row > 0 ? [col, row - 1] : [],
-        ArrowDown: row < state.height - 1 ? [col, row + 1] : [],
+        ArrowDown: row < height() - 1 ? [col, row + 1] : [],
         ArrowLeft: col > 0
           ? [col - 1, row]
           : row > 0
-          ? [state.width - 1, row - 1]
+          ? [width() - 1, row - 1]
           : [],
-        ArrowRight: col < state.width - 1
+        ArrowRight: col < width() - 1
           ? [col + 1, row]
-          : row < state.height - 1
+          : row < height() - 1
           ? [0, row + 1]
           : [],
       };
@@ -271,21 +275,21 @@ define("mine-sweeper").setup((host) => {
       }
     };
 
-    gameBoard.set(row * state.width + col, square);
+    gameBoard.set(row * width() + col, square);
 
     const keys = [
-      (row - 1) * state.width + col,
+      (row - 1) * width() + col,
     ];
 
     if (col - 1 >= 0) {
       keys.push(
-        (row - 1) * state.width + (col - 1),
-        row * state.width + (col - 1),
+        (row - 1) * width() + (col - 1),
+        row * width() + (col - 1),
       );
     }
 
-    if (col + 1 <= state.width - 1) {
-      keys.push((row - 1) * state.width + (col + 1));
+    if (col + 1 <= width() - 1) {
+      keys.push((row - 1) * width() + (col + 1));
     }
 
     for (const key of keys) {
