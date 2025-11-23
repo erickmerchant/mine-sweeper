@@ -9,7 +9,7 @@
   },
   "imports": {
     "@flint/framework": "jsr:@flint/framework@^0.18.0",
-    "@handcraft/lib": "jsr:@handcraft/lib@^1.7.1"
+    "@handcraft/lib": "jsr:@handcraft/lib@^1.7.2"
   },
   "compilerOptions": {
     "lib": ["deno.ns", "dom", "dom.iterable", "es2023"]
