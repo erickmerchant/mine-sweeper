@@ -21,7 +21,7 @@ type GameState = {
   hidden: number;
 };
 
-const { div, button } = h.html;
+const { div, button, style } = h.html;
 
 const PLAY_STATES = {
   PLAYING: 0,
@@ -89,7 +89,8 @@ define("mine-sweeper").setup((host) => {
       );
 
   host(
-    shadow.css(() => `:host { --width: ${width()}; --height: ${height()};`)(
+    shadow(
+      style(() => `:host { --width: ${width()}; --height: ${height()};`),
       infoPanel,
       board,
     ),
