@@ -1,4 +1,5 @@
-import { h, render, shadow } from "@handcraft/lib";
+import { h, shadow } from "@handcraft/lib";
+import { render } from "@handcraft/lib/render";
 
 const {
   html,
