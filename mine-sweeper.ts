@@ -1,4 +1,4 @@
-import { define, effect, h, observe, shadow, watch } from "@handcraft/lib";
+import { define, effect, h, observe, watch } from "@handcraft/lib";
 import emButton from "./em-button.ts";
 
 type Square = {
@@ -87,12 +87,11 @@ define("mine-sweeper").setup((host) => {
         ),
       );
 
-  host(
-    shadow(
-      style(() => `:host { --width: ${width()}; --height: ${height()};`),
-      infoPanel,
-      board,
-    ),
+  host.shadow(
+    { mode: "open" },
+    style(() => `:host { --width: ${width()}; --height: ${height()};`),
+    infoPanel,
+    board,
   );
 
   function cell(row: number, col: number) {

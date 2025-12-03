@@ -1,4 +1,4 @@
-import { h, shadow } from "@handcraft/lib";
+import { h } from "@handcraft/lib";
 import { render } from "@handcraft/lib/render";
 
 const {
@@ -23,9 +23,11 @@ export default function () {
         script.type("module").src("/mine-sweeper.js"),
       ),
       body.class("page")(
-        mineSweeper.count(10).height(8).width(8)(
-          shadow(link.rel("stylesheet").href("/mine-sweeper.css")),
-        ),
+        mineSweeper.count(10).height(8).width(8)
+          .shadow(
+            { mode: "open" },
+            link.rel("stylesheet").href("/mine-sweeper.css"),
+          ),
       ),
     ),
   );

@@ -1,5 +1,5 @@
 import type { HandcraftElement } from "@handcraft/lib";
-import { define, h, shadow } from "@handcraft/lib";
+import { define, h } from "@handcraft/lib";
 
 const { button, slot, style } = h.html;
 
@@ -55,15 +55,14 @@ export default define("em-button").setup((host: HandcraftElement) => {
     );
   };
 
-  return host(shadow(
-    style(`
-      * { box-sizing: border-box; margin: 0; padding: 0; font: inherit }
-    `),
+  return host.shadow(
+    { mode: "open" },
+    style(`* { box-sizing: border-box; margin: 0; padding: 0; font: inherit }`),
     button
       .part("button")
       .type("button")
       .on("click touchend", leftclick)
       .on("mousedown touchstart", longclick)
       .on("contextmenu", rightclick)(slot),
-  ));
+  );
 });
