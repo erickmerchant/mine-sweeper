@@ -59,80 +59,58 @@
   block-size: 100%;
   inline-size: 100%;
 
-  &::part(button) {
-    display: grid;
-    place-content: center;
-    aspect-ratio: 1;
-    block-size: 100%;
-    inline-size: 100%;
-    appearance: none;
-    background-color: oklch(85% 0 0);
-    border: none;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-  }
+  display: grid;
+  place-content: center;
+  aspect-ratio: 1;
+  block-size: 100%;
+  inline-size: 100%;
+  appearance: none;
+  background-color: oklch(85% 0 0);
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .revealed {
-  &::part(button) {
-    background-color: oklch(95% 0 0);
-    cursor: oklch(90% 0 0);
-  }
+  background-color: oklch(95% 0 0);
+  cursor: oklch(90% 0 0);
 }
 
 .armed-adjacent-count--1 {
-  &::part(button) {
-    color: oklch(50% 0.4 260);
-  }
+  color: oklch(50% 0.4 260);
 }
 
 .armed-adjacent-count--2 {
-  &::part(button) {
-    color: oklch(50% 0.4 215);
-  }
+  color: oklch(50% 0.4 215);
 }
 
 .armed-adjacent-count--3 {
-  &::part(button) {
-    color: oklch(50% 0.4 170);
-  }
+  color: oklch(50% 0.4 170);
 }
 
 .armed-adjacent-count--4 {
-  &::part(button) {
-    color: oklch(50% 0.4 125);
-  }
+  color: oklch(50% 0.4 125);
 }
 
 .armed-adjacent-count--5 {
-  &::part(button) {
-    color: oklch(50% 0.4 80);
-  }
+  color: oklch(50% 0.4 80);
 }
 
 .armed-adjacent-count--6 {
-  &::part(button) {
-    color: oklch(50% 0.4 35);
-  }
+  color: oklch(50% 0.4 35);
 }
 
 .armed-adjacent-count--7 {
-  &::part(button) {
-    color: oklch(50% 0.4 350);
-  }
+  color: oklch(50% 0.4 350);
 }
 
 .armed-adjacent-count--8 {
-  &::part(button) {
-    color: oklch(50% 0.4 305);
-  }
+  color: oklch(50% 0.4 305);
 }
 
 :not(.armed-state).flagged.revealed {
-  &::part(button) {
-    --content: ;
-  }
+  --content: ;
 }

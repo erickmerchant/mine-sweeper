@@ -1,9 +1,8 @@
 import type { HandcraftElement } from "@handcraft/lib";
-import { define, h } from "@handcraft/lib";
-
-const { button, slot, style } = h.html;
+import { define, effect, observe } from "@handcraft/lib";
 
 export default define("em-button").setup((host: HandcraftElement) => {
+  const observed = observe(host);
   const state: {
     start: number;
     timeout?: number | null;
@@ -55,14 +54,11 @@ export default define("em-button").setup((host: HandcraftElement) => {
     );
   };
 
-  return host.shadow(
-    { mode: "open" },
-    style(`* { box-sizing: border-box; margin: 0; padding: 0; font: inherit }`),
-    button
-      .part("button")
-      .type("button")
-      .on("click touchend", leftclick)
-      .on("mousedown touchstart", longclick)
-      .on("contextmenu", rightclick)(slot),
-  );
+  effect(() => {
+    for (const button of observed("> button")) {
+      button.on("click touchend", leftclick)
+        .on("mousedown touchstart", longclick)
+        .on("contextmenu", rightclick);
+    }
+  });
 });

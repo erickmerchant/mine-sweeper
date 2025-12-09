@@ -20,7 +20,7 @@ type GameState = {
   hidden: number;
 };
 
-const { div, style } = h.html;
+const { div, style, button } = h.html;
 
 const PLAY_STATES = {
   PLAYING: 0,
@@ -283,35 +283,39 @@ define("mine-sweeper").setup((host) => {
     return div.role("gridcell").aria({
       colindex: col + 1,
     })(
-      emButton
-        .aria({ label: () => (square.isRevealed ? null : "Hidden") })
-        .class("btn", {
-          revealed: () => square.isRevealed,
-          flagged: () => square.isFlagged,
-          ...range(8).reduce<Record<string, () => boolean>>((classes, i) => {
-            classes[`armed-adjacent-count--${i}`] = () =>
-              square.adjacent.filter((square) => square.isArmed).length === i;
+      emButton(
+        button
+          .type("button")
+          .aria({ label: () => (square.isRevealed ? null : "Hidden") })
+          .class("btn", {
+            revealed: () => square.isRevealed,
+            flagged: () => square.isFlagged,
+            ...range(8).reduce<Record<string, () => boolean>>((classes, i) => {
+              classes[`armed-adjacent-count--${i}`] = () =>
+                square.adjacent.filter((square) => square.isArmed).length === i;
 
-            return classes;
-          }, {}),
-        })
-        .on("leftclick", revealSquare)
-        .on("longclick", toggleFlagDelayed)
-        .on("rightclick", toggleFlagImmediately)
-        .on("keydown", moveFocus as EventListener)
-        .effect(focus)(() => {
-          if (!square.isRevealed) {
-            return square.isFlagged ? "🚩" : "";
-          } else {
-            return square.isFlagged && !square.isArmed
-              ? "❌"
-              : square.isArmed
-              ? "💥"
-              : `${
-                square.adjacent.filter((square) => square.isArmed).length || ""
-              }`;
-          }
-        }),
+              return classes;
+            }, {}),
+          })
+          .on("leftclick", revealSquare)
+          .on("longclick", toggleFlagDelayed)
+          .on("rightclick", toggleFlagImmediately)
+          .on("keydown", moveFocus as EventListener)
+          .effect(focus)(() => {
+            if (!square.isRevealed) {
+              return square.isFlagged ? "🚩" : "";
+            } else {
+              return square.isFlagged && !square.isArmed
+                ? "❌"
+                : square.isArmed
+                ? "💥"
+                : `${
+                  square.adjacent.filter((square) => square.isArmed).length ||
+                  ""
+                }`;
+            }
+          }),
+      ),
     );
   }
 
