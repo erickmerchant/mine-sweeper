@@ -53,7 +53,6 @@ define("mine-sweeper").setup((host) => {
 
     state.flags = count();
     state.hidden = area();
-
     state.playState = PLAY_STATES.PLAYING;
     state.time = 0;
     state.hasFocus = [];
@@ -82,7 +81,7 @@ define("mine-sweeper").setup((host) => {
             })
             .role("row")
             .class("row")(
-              ...range(width()).map((col) => cell(row, col)),
+              ...range(width()).map((col) => cell(row, col, count())),
             )
         ),
       );
@@ -94,7 +93,7 @@ define("mine-sweeper").setup((host) => {
     board,
   );
 
-  function cell(row: number, col: number) {
+  function cell(row: number, col: number, _count: number) {
     const square = watch<Square>({
       x: col,
       y: row,
