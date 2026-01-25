@@ -1,4 +1,4 @@
-import { define, effect, h, observe, watch } from "@handcraft/lib";
+import { $, define, effect, h, observe, watch } from "@handcraft/lib";
 import emButton from "./em-button.ts";
 
 type Square = {
@@ -86,7 +86,7 @@ define("mine-sweeper").setup((host) => {
         ),
       );
 
-  host.shadow(
+  $(host).shadow(
     { mode: "open" },
     style(() => `:host { --width: ${width()}; --height: ${height()};`),
     infoPanel,
@@ -320,7 +320,7 @@ define("mine-sweeper").setup((host) => {
 
   function updateTime() {
     state.time = state.startTime
-      ? Math.floor((Date.now() - state.startTime) / 1000)
+      ? Math.floor((Date.now() - state.startTime) / 1_000)
       : 0;
   }
 });

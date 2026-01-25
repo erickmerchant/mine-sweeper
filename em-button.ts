@@ -1,7 +1,6 @@
-import type { HandcraftElement } from "@handcraft/lib";
 import { define, effect, observe } from "@handcraft/lib";
 
-export default define("em-button").setup((host: HandcraftElement) => {
+export default define("em-button").setup((host: Element) => {
   const observed = observe(host);
   const state: {
     start: number;
