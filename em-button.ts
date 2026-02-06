@@ -10,14 +10,23 @@ export default define("em-button", {
       timeout: null,
     };
 
-    const reset = () => {
+    const button = host.querySelector(":scope > button");
+
+    if (button) {
+      $(button).on("click touchend", leftclick)
+        .on("mousedown touchstart", longclick)
+        .on("contextmenu", rightclick);
+    }
+
+    function reset() {
       if (state.timeout) {
         clearTimeout(state.timeout);
       }
 
       state.start = Infinity;
-    };
-    const leftclick = (e: Event) => {
+    }
+
+    function leftclick(e: Event) {
       if (Date.now() - state.start < 1_000) {
         reset();
 
@@ -25,8 +34,9 @@ export default define("em-button", {
           new Event("leftclick", { bubbles: true, composed: true }),
         );
       }
-    };
-    const longclick = (e: Event) => {
+    }
+
+    function longclick(e: Event) {
       e.preventDefault();
 
       state.start = Date.now();
@@ -42,8 +52,9 @@ export default define("em-button", {
         1_000,
         e.currentTarget,
       );
-    };
-    const rightclick = (e: Event) => {
+    }
+
+    function rightclick(e: Event) {
       e.preventDefault();
 
       reset();
@@ -51,14 +62,6 @@ export default define("em-button", {
       e.currentTarget?.dispatchEvent(
         new Event("rightclick", { bubbles: true, composed: true }),
       );
-    };
-
-    const button = host.querySelector(":scope > button");
-
-    if (button) {
-      $(button).on("click touchend", leftclick)
-        .on("mousedown touchstart", longclick)
-        .on("contextmenu", rightclick);
     }
   },
 });
