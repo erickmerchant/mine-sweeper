@@ -73,7 +73,7 @@ define("mine-sweeper", {
 
     $(host).shadow(
       { mode: "open" },
-      style(() => `:host { --width: ${width()}; --height: ${height()};`),
+      style(() => `:host { --width: ${width()}; --height: ${height()}; }`),
       infoPanel,
       board,
     );
