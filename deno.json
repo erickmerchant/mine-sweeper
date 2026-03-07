@@ -8,11 +8,11 @@
     }
   },
   "imports": {
-    "@flint/framework": "jsr:@flint/framework@^0.27.0",
+    "@flint/framework": "jsr:@flint/framework@^0.28.0",
     "@handcraft/lib": "jsr:@handcraft/lib@^1.16.0"
   },
   "unstable": ["bundle"],
   "compilerOptions": {
-    "lib": ["deno.ns", "dom", "dom.iterable", "es2023"]
+    "lib": ["deno.ns", "deno.unstable", "dom", "dom.iterable", "es2023"]
   }
 }
