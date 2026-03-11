@@ -13,7 +13,7 @@ const {
 } = h.html;
 
 export default function () {
-  return render(
+  return render(() =>
     html.lang("en-US")(
       head(
         meta.charset("utf-8"),
@@ -29,6 +29,6 @@ export default function () {
             link.rel("stylesheet").href("/mine-sweeper.css?inline"),
           ),
       ),
-    ),
+    )
   );
 }
