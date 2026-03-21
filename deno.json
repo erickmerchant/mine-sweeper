@@ -9,7 +9,7 @@
   },
   "imports": {
     "@flint/framework": "jsr:@flint/framework@^0.31.0",
-    "@handcraft/lib": "jsr:@handcraft/lib@^2.1.0"
+    "@handcraft/lib": "jsr:@handcraft/lib@^2.1.1"
   },
   "unstable": ["bundle"],
   "compilerOptions": {
