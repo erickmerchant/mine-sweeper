@@ -8,8 +8,8 @@
     }
   },
   "imports": {
-    "@flint/framework": "jsr:@flint/framework@^0.32.0",
-    "@handcraft/lib": "jsr:@handcraft/lib@^2.1.1"
+    "@flint/framework": "jsr:@flint/framework@^0.33.0",
+    "@handcraft/lib": "jsr:@handcraft/lib@^2.2.0"
   },
   "unstable": ["bundle"],
   "compilerOptions": {
