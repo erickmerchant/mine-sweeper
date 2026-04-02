@@ -178,9 +178,16 @@ define("mine-sweeper", {
       );
 
       function arm() {
-        let armed = [...gameBoard.values()].map((s) => ({
+        const values = [...gameBoard.values()];
+        const orders = new Uint32Array(values.length);
+
+        globalThis.crypto.getRandomValues(orders);
+
+        let armed = values.map((s, i) => ({
           square: s,
-          order: s === square ? 2 : Math.random(),
+          order: s === square
+            ? 2
+            : orders[i] / 0b11111111111111111111111111111111,
         }));
 
         armed.sort((a, b) => a.order - b.order);
