@@ -28,12 +28,10 @@ const PLAY_STATES = {
   WON: 2,
 };
 
-define("mine-sweeper", {
-  attrs: {
-    height: 8,
-    width: 8,
-    count: 10,
-  },
+define<{ height: number; width: number; count: number }>("mine-sweeper", {
+  height: 8,
+  width: 8,
+  count: 10,
   connected(host) {
     const height = () => this.height;
     const width = () => this.width;

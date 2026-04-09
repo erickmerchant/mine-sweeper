@@ -10,13 +10,9 @@ export default define("em-button", {
       timeout: null,
     };
 
-    const button = host.querySelector(":scope > button");
-
-    if (button) {
-      $(button).on("click touchend", leftclick)
-        .on("mousedown touchstart", longclick)
-        .on("contextmenu", rightclick);
-    }
+    $(host).on("click touchend", leftclick)
+      .on("mousedown touchstart", longclick)
+      .on("contextmenu", rightclick);
 
     function reset() {
       if (state.timeout) {
@@ -30,7 +26,7 @@ export default define("em-button", {
       if (Date.now() - state.start < 1_000) {
         reset();
 
-        e.currentTarget?.dispatchEvent(
+        e.target?.dispatchEvent(
           new Event("leftclick", { bubbles: true, composed: true }),
         );
       }
@@ -50,7 +46,7 @@ export default define("em-button", {
           );
         },
         1_000,
-        e.currentTarget,
+        e.target,
       );
     }
 
@@ -59,7 +55,7 @@ export default define("em-button", {
 
       reset();
 
-      e.currentTarget?.dispatchEvent(
+      e.target?.dispatchEvent(
         new Event("rightclick", { bubbles: true, composed: true }),
       );
     }
