@@ -9,9 +9,9 @@
   },
   "imports": {
     "@flint/framework": "jsr:@flint/framework@^0.34.1",
-    "@handcraft/lib": "jsr:@handcraft/lib@^2.3.1"
+    "@handcraft/lib": "jsr:@handcraft/lib@^3.0.0"
   },
-  "unstable": ["bundle"],
+  "unstable": ["bundle", "raw-imports"],
   "compilerOptions": {
     "lib": ["deno.ns", "deno.unstable", "dom", "dom.iterable", "es2023"]
   }

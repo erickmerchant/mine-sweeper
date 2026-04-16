@@ -20,7 +20,7 @@ type GameState = {
   hidden: number;
 };
 
-const { div, style, button } = h.html;
+const { div, style, button, template } = h.html;
 
 const PLAY_STATES = {
   PLAYING: 0,
@@ -69,11 +69,12 @@ define<{ height: number; width: number; count: number }>("mine-sweeper", {
       div(() => `${state.time} ⏱️`),
     );
 
-    $(host).shadow(
-      { mode: "open" },
-      style(() => `:host { --width: ${width()}; --height: ${height()}; }`),
-      infoPanel,
-      board,
+    $(host)(
+      template.shadowrootmode("open")(
+        style(() => `:host { --width: ${width()}; --height: ${height()}; }`),
+        infoPanel,
+        board,
+      ),
     );
 
     function board() {
