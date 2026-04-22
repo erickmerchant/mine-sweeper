@@ -1,6 +1,6 @@
 import { $, define } from "@handcraft/lib";
 
-export default define("em-button", {
+define("em-button", {
   connected(host: Element) {
     const state: {
       start: number;

@@ -1,5 +1,5 @@
 import { $, define, effect, h, watch } from "@handcraft/lib";
-import emButton from "./em-button.ts";
+import "./em-button.ts";
 
 type Square = {
   x: number;
@@ -20,7 +20,7 @@ type GameState = {
   hidden: number;
 };
 
-const { div, style, button, template } = h.html;
+const { div, style, button, template, "em-button": emButton } = h.html;
 
 const PLAY_STATES = {
   PLAYING: 0,
