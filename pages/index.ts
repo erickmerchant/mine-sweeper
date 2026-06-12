@@ -1,4 +1,5 @@
-import { h } from "@handcraft/lib/templating";
+import { h } from "@handcraft/lib";
+import mineSweeper from "../elements/mine-sweeper.ts";
 
 const {
   html,
@@ -7,9 +8,7 @@ const {
   title,
   link,
   script,
-  template,
   body,
-  "mine-sweeper": mineSweeper,
 } = h.html;
 
 export default function () {
@@ -22,11 +21,7 @@ export default function () {
       script.type("module").src("/elements/mine-sweeper.js"),
     ),
     body.class("page")(
-      mineSweeper.count(10).height(8).width(8)(
-        template.shadowrootmode("open")(
-          link.rel("stylesheet").href("./elements/mine-sweeper.css"),
-        ),
-      ),
+      mineSweeper.count(10).height(8).width(8),
     ),
   );
 }
