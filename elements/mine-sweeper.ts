@@ -373,7 +373,7 @@ export class MineSweeper extends HandcraftElement {
   }
 }
 
-export default MineSweeper.define("mine-sweeper");
+export default MineSweeper.define("mine-sweeper") as HandcraftNode;
 
 function range(n: number): Array<number> {
   return [...Array(n).keys()];

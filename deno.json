@@ -1,4 +1,10 @@
 {
+  "name": "@erickmerchant/mine-sweeper",
+  "version": "1.0.0",
+  "license": "MIT",
+  "exports": {
+    ".": "./elements/mine-sweeper.ts"
+  },
   "tasks": {
     "dev": "deno run -A --watch-hmr flint.ts --port=4000",
     "build": "deno run -A flint.ts --build",
