@@ -2,7 +2,7 @@ import {
   effect,
   h,
   HandcraftElement,
-  HandcraftNode,
+  type HandcraftNode,
   watch,
 } from "@handcraft/lib";
 

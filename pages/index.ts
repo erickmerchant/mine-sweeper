@@ -21,7 +21,7 @@ export default function () {
       script.type("module").src("/elements/mine-sweeper.js"),
     ),
     body.class("page")(
-      mineSweeper.count(10).height(8).width(8),
+      mineSweeper.height(8).width(8).count(10),
     ),
   );
 }
