@@ -1,10 +1,4 @@
-import {
-  effect,
-  h,
-  HandcraftElement,
-  type HandcraftNode,
-  watch,
-} from "@handcraft/lib";
+import { h, HandcraftElement, type HandcraftNode, watch } from "@handcraft/lib";
 
 type Square = {
   x: number;
@@ -61,12 +55,6 @@ export class MineSweeper extends HandcraftElement {
     state.startTime = null;
     state.timeInterval = null;
 
-    effect(() => {
-      if (state.timeInterval) {
-        clearInterval(state.timeInterval);
-      }
-    });
-
     const cell = (row: number, col: number) => {
       const square = watch<Square>({
         x: col,
@@ -97,7 +85,7 @@ export class MineSweeper extends HandcraftElement {
         schedule(cb: () => void) {
           this.clear();
 
-          this.timeout = setTimeout(cb, 1000);
+          this.timeout = setTimeout(cb, 1000) as unknown as number;
 
           this.start = Date.now();
         },
