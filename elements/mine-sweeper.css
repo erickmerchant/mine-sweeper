@@ -1,21 +1,19 @@
-@scope (mine-sweeper) {
-  :scope {
-    max-inline-size: 100%;
-    box-sizing: border-box;
-    display: grid;
-    background-color: oklch(95% 0 0);
-    padding: calc(var(--w) / 40);
-    border-radius: 0.75rem;
-    margin: 0;
-    place-items: center;
-    font-family: ui-monospace, monospace;
-    font-weight: bold;
-    font-size: calc(min(80cqmin, calc(50px * var(--width))) / 100 * 5);
-    inline-size: var(--w);
-    gap: 1px;
+mine-sweeper {
+  max-inline-size: 100%;
+  box-sizing: border-box;
+  display: grid;
+  background-color: oklch(95% 0 0);
+  padding: calc(var(--w) / 40);
+  border-radius: 0.75rem;
+  margin: 0;
+  place-items: center;
+  font-family: ui-monospace, monospace;
+  font-weight: bold;
+  font-size: calc(min(80cqmin, calc(50px * var(--width))) / 100 * 5);
+  inline-size: var(--w);
+  gap: 1px;
 
-    --w: min(calc(100dvi - 2rem), calc(2.75rem * var(--width)));
-  }
+  --w: min(calc(100dvi - 2rem), calc(2.75rem * var(--width)));
 
   &::part(info-panel) {
     display: grid;
