@@ -101,6 +101,6 @@ mine-sweeper {
   }
 
   &:part(flagged revealed) {
-    --content: ;
+    --content:;
   }
 }
