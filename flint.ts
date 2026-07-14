@@ -7,7 +7,7 @@ import index from "./pages/index.ts";
 const app = flint()
   .route("/", view(index))
   .route("/robots.txt")
-  .file("/pages/index.css", css)
+  .file("/styles/index.css", css)
   .file("/elements/mine-sweeper.js", js)
   .file("/elements/mine-sweeper.css", css);
 
