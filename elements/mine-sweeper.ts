@@ -366,3 +366,9 @@ export default MineSweeper.define("mine-sweeper") as HandcraftNode;
 function range(n: number): Array<number> {
   return [...Array(n).keys()];
 }
+
+export type { HandcraftNode };
+
+export async function css(): Promise<HandcraftNode> {
+  return style(await Deno.readTextFile("./mine-sweeper.css"));
+}
