@@ -1,6 +1,6 @@
 {
   "name": "@erickmerchant/mine-sweeper",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": "MIT",
   "exports": {
     ".": "./elements/mine-sweeper.ts"
@@ -11,8 +11,7 @@
     "stage": {
       "command": "deno serve -A --port=4000 --parallel dist/serve.ts",
       "dependencies": ["build"]
-    },
-    "release": "deno pack --output dist/mine-sweeper.tgz elements/mine-sweeper.css  elements/mine-sweeper.ts && npm publish --access public --scope @erickmerchant ./dist/mine-sweeper.tgz && deno publish"
+    }
   },
   "imports": {
     "@flint/framework": "jsr:@flint/framework@^0.37.0",
