@@ -1,6 +1,6 @@
 {
   "name": "@erickmerchant/mine-sweeper",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "license": "MIT",
   "exports": {
     ".": "./elements/mine-sweeper.ts"

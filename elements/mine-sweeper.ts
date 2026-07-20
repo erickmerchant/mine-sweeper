@@ -366,11 +366,3 @@ export default MineSweeper.define("mine-sweeper") as HandcraftNode;
 function range(n: number): Array<number> {
   return [...Array(n).keys()];
 }
-
-import cssText from "./mine-sweeper.css" with { type: "text" };
-
-export type { HandcraftNode };
-
-export function css(): HandcraftNode {
-  return style(cssText);
-}
