@@ -14,8 +14,8 @@
     }
   },
   "imports": {
-    "@flint/framework": "jsr:@flint/framework@^0.39.0",
-    "@handcraft/lib": "jsr:@handcraft/lib@^4.5.0"
+    "@flint/framework": "jsr:@flint/framework@^0.39.1",
+    "@handcraft/lib": "jsr:@handcraft/lib@^4.5.1"
   },
   "unstable": ["bundle", "raw-imports"],
   "compilerOptions": {
