@@ -1,4 +1,10 @@
-import { h, HandcraftElement, type HandcraftNode, watch } from "@handcraft/lib";
+import {
+  h,
+  HandcraftElement,
+  type HandcraftNode,
+  reactive,
+  watch,
+} from "@handcraft/lib";
 
 type Square = {
   x: number;
@@ -19,25 +25,33 @@ const PLAY_STATES = {
 
 export class MineSweeper extends HandcraftElement {
   static observedAttributes = ["height", "width", "count"];
-  static observedProperties = [
-    "playState",
-    "time",
-    "hasFocus",
-    "flags",
-    "hiddenCount",
-  ];
 
-  height = 8;
-  width = 8;
-  count = 10;
+  @reactive()
+  accessor height = 8;
 
-  playState: number = PLAY_STATES.PLAYING;
-  time: number = 0;
-  hasFocus: Array<number> = [];
+  @reactive()
+  accessor width = 8;
+
+  @reactive()
+  accessor count = 10;
+
+  @reactive()
+  accessor playState: number = PLAY_STATES.PLAYING;
+
+  @reactive()
+  accessor time: number = 0;
+
+  @reactive()
+  accessor hasFocus: Array<number> = [];
+
   timeInterval?: number | null = null;
   startTime?: number | null = null;
-  flags: number = 0;
-  hiddenCount: number = 0;
+
+  @reactive()
+  accessor flags: number = 0;
+
+  @reactive()
+  accessor hiddenCount: number = 0;
 
   gameBoard: Map<number, Square> = new Map();
 
