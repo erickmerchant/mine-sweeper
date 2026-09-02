@@ -15,7 +15,7 @@ export default function () {
   return html.lang("en-US")(
     head(
       meta.charset("utf-8"),
-      meta.name("viewport").content("width=device-width, initial-scale=1"),
+      meta.name("viewport").content("width=device-width"),
       title("Mine-Sweeper"),
       link.rel("stylesheet").href("/styles/index.css"),
       script.type("module").src("/elements/mine-sweeper.js"),
