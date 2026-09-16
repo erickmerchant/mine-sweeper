@@ -19,25 +19,27 @@ const PLAY_STATES = {
 
 export class MineSweeper extends HandcraftElement {
   static observedAttributes = ["height", "width", "count"];
-  static observedProperties = [
-    "playState",
-    "time",
-    "hasFocus",
-    "flags",
-    "hiddenCount",
-  ];
 
   height = 8;
   width = 8;
   count = 10;
 
-  playState: number = PLAY_STATES.PLAYING;
-  time: number = 0;
-  hasFocus: Array<number> = [];
+  state: {
+    playState: number;
+    time: number;
+    hasFocus: Array<number>;
+    flags: number;
+    hiddenCount: number;
+  } = watch({
+    playState: PLAY_STATES.PLAYING,
+    time: 0,
+    hasFocus: [],
+    flags: 0,
+    hiddenCount: 0,
+  });
+
   timeInterval?: number | null = null;
   startTime?: number | null = null;
-  flags: number = 0;
-  hiddenCount: number = 0;
 
   gameBoard: Map<number, Square> = new Map();
 
@@ -131,7 +133,7 @@ export class MineSweeper extends HandcraftElement {
         square.isArmed = true;
       }
 
-      this.playState = PLAY_STATES.PLAYING;
+      this.state.playState = PLAY_STATES.PLAYING;
 
       this.startTime = Date.now();
       this.timeInterval = setInterval(
@@ -141,11 +143,11 @@ export class MineSweeper extends HandcraftElement {
     };
 
     const revealSquare = () => {
-      if (this.playState !== PLAY_STATES.PLAYING) {
+      if (this.state.playState !== PLAY_STATES.PLAYING) {
         return;
       }
 
-      if (this.hiddenCount === this.height * this.width) {
+      if (this.state.hiddenCount === this.height * this.width) {
         arm();
       }
 
@@ -153,10 +155,10 @@ export class MineSweeper extends HandcraftElement {
         if (!square.isFlagged && !square.isRevealed) {
           square.isRevealed = true;
 
-          this.hiddenCount -= 1;
+          this.state.hiddenCount -= 1;
 
           if (square.isArmed) {
-            this.playState = PLAY_STATES.LOST;
+            this.state.playState = PLAY_STATES.LOST;
 
             if (this.timeInterval) {
               clearInterval(this.timeInterval);
@@ -189,7 +191,7 @@ export class MineSweeper extends HandcraftElement {
                   ) {
                     sq.isRevealed = true;
 
-                    this.hiddenCount -= 1;
+                    this.state.hiddenCount -= 1;
 
                     if (!sq.adjacent.some((square) => square.isArmed)) {
                       next.push(...sq.adjacent);
@@ -201,8 +203,8 @@ export class MineSweeper extends HandcraftElement {
               } while (current.length > 0);
             }
 
-            if (this.hiddenCount === this.count) {
-              this.playState = PLAY_STATES.WON;
+            if (this.state.hiddenCount === this.count) {
+              this.state.playState = PLAY_STATES.WON;
 
               for (const square of this.gameBoard.values()) {
                 if (!square.isFlagged) {
@@ -214,7 +216,7 @@ export class MineSweeper extends HandcraftElement {
                 }
               }
 
-              this.flags = 0;
+              this.state.flags = 0;
 
               if (this.timeInterval) {
                 clearInterval(this.timeInterval);
@@ -227,14 +229,14 @@ export class MineSweeper extends HandcraftElement {
 
     const toggleFlagDelayed = () => {
       longPress.schedule(() => {
-        if (this.playState !== PLAY_STATES.PLAYING) {
+        if (this.state.playState !== PLAY_STATES.PLAYING) {
           return;
         }
 
         if (!square.isRevealed) {
           square.isFlagged = !square.isFlagged;
 
-          this.flags += square.isFlagged ? -1 : 1;
+          this.state.flags += square.isFlagged ? -1 : 1;
         }
       });
     };
@@ -242,7 +244,7 @@ export class MineSweeper extends HandcraftElement {
     const toggleFlagImmediately = (e: Event) => {
       e.preventDefault();
 
-      if (this.playState !== PLAY_STATES.PLAYING) {
+      if (this.state.playState !== PLAY_STATES.PLAYING) {
         return;
       }
 
@@ -250,7 +252,7 @@ export class MineSweeper extends HandcraftElement {
         if (!square.isRevealed) {
           square.isFlagged = !square.isFlagged;
 
-          this.flags += square.isFlagged ? -1 : 1;
+          this.state.flags += square.isFlagged ? -1 : 1;
         }
       });
     };
@@ -271,12 +273,12 @@ export class MineSweeper extends HandcraftElement {
           : [],
       };
 
-      this.hasFocus = keys?.[e.key] ?? [];
+      this.state.hasFocus = keys?.[e.key] ?? [];
     };
 
     const focus = (el: HTMLElement) => {
       if (
-        this.hasFocus?.[0] === col && this.hasFocus?.[1] === row
+        this.state.hasFocus?.[0] === col && this.state.hasFocus?.[1] === row
       ) {
         el.focus();
       }
@@ -322,17 +324,17 @@ export class MineSweeper extends HandcraftElement {
   }
 
   updateTime = (): void => {
-    this.time = this.startTime
+    this.state.time = this.startTime
       ? Math.floor((Date.now() - this.startTime) / 1_000)
       : 0;
   };
 
   override view(host: HandcraftNode) {
-    this.flags = this.count;
-    this.hiddenCount = this.height * this.width;
-    this.playState = PLAY_STATES.PLAYING;
-    this.time = 0;
-    this.hasFocus = [];
+    this.state.flags = this.count;
+    this.state.hiddenCount = this.height * this.width;
+    this.state.playState = PLAY_STATES.PLAYING;
+    this.state.time = 0;
+    this.state.hasFocus = [];
     this.startTime = null;
     this.timeInterval = null;
 
@@ -341,9 +343,11 @@ export class MineSweeper extends HandcraftElement {
         `:host { --width: ${this.width}; --height: ${this.height}; }`
       ),
       div.part("info-panel")(
-        div(() => `🚩 ${this.flags}`),
-        div.aria("live", "polite")(() => ["", "💀", "🎉"][this.playState]),
-        div(() => `${this.time} ⏱️`),
+        div(() => `🚩 ${this.state.flags}`),
+        div.aria("live", "polite")(() =>
+          ["", "💀", "🎉"][this.state.playState]
+        ),
+        div(() => `${this.state.time} ⏱️`),
       ),
       div
         .aria("rowcount", this.height)
