@@ -1,15 +1,7 @@
 import { h } from "@handcraft/lib";
 import mineSweeper from "../elements/mine-sweeper.ts";
 
-const {
-  html,
-  head,
-  meta,
-  title,
-  link,
-  script,
-  body,
-} = h.html;
+const { html, head, meta, title, link, script, body } = h.html;
 
 export default function () {
   return html.lang("en-US")(
