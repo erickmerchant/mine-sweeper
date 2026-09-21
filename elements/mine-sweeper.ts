@@ -284,43 +284,45 @@ export class MineSweeper extends HandcraftElement {
       }
     };
 
-    return div.role("gridcell").aria("colindex", col + 1)(
-      button.on("click touchend", revealSquare)
-        .on("mousedown touchstart", toggleFlagDelayed)
-        .on("contextmenu", toggleFlagImmediately)
-        .on("keydown", moveFocus as EventListener)
-        .type("button")
-        .aria("label", () => (square.isRevealed ? null : "Hidden"))
-        .part("btn", {
-          revealed: () => square.isRevealed,
-          flagged: () => square.isFlagged,
-          ...range(8).reduce<Record<string, () => boolean>>(
-            (classes, i) => {
-              classes[`armed-adjacent-count--${i}`] = () =>
-                square.adjacent.filter((square) => square.isArmed)
-                  .length === i;
+    return div
+      .role("gridcell")
+      .aria("colindex", col + 1)(
+        button.on("click touchend", revealSquare)
+          .on("mousedown touchstart", toggleFlagDelayed)
+          .on("contextmenu", toggleFlagImmediately)
+          .on("keydown", moveFocus as EventListener)
+          .type("button")
+          .aria("label", () => (square.isRevealed ? null : "Hidden"))
+          .part("btn", {
+            revealed: () => square.isRevealed,
+            flagged: () => square.isFlagged,
+            ...range(8).reduce<Record<string, () => boolean>>(
+              (classes, i) => {
+                classes[`armed-adjacent-count--${i}`] = () =>
+                  square.adjacent.filter((square) => square.isArmed)
+                    .length === i;
 
-              return classes;
-            },
-            {},
-          ),
-        })
-        .effect(focus)(() => {
-          if (!square.isRevealed) {
-            return square.isFlagged ? "🚩" : "";
-          } else {
-            return square.isFlagged && !square.isArmed
-              ? "❌"
-              : square.isArmed
-              ? "💥"
-              : `${
-                square.adjacent.filter((square) => square.isArmed)
-                  .length ||
-                ""
-              }`;
-          }
-        }),
-    );
+                return classes;
+              },
+              {},
+            ),
+          })
+          .effect(focus)(() => {
+            if (!square.isRevealed) {
+              return square.isFlagged ? "🚩" : "";
+            } else {
+              return square.isFlagged && !square.isArmed
+                ? "❌"
+                : square.isArmed
+                ? "💥"
+                : `${
+                  square.adjacent.filter((square) => square.isArmed)
+                    .length ||
+                  ""
+                }`;
+            }
+          }),
+      );
   }
 
   updateTime = (): void => {
