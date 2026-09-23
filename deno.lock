@@ -2,7 +2,7 @@
   "version": "5",
   "specifiers": {
     "jsr:@cfa/gitignore-parser@~0.1.4": "0.1.4",
-    "jsr:@flint/framework@~0.40.1": "0.40.1",
+    "jsr:@flint/framework@0.41": "0.41.0",
     "jsr:@handcraft/lib@^4.7.1": "4.7.1",
     "jsr:@std/async@^1.5.0": "1.5.0",
     "jsr:@std/cli@^1.0.32": "1.0.32",
@@ -14,7 +14,6 @@
     "jsr:@std/internal@^1.0.14": "1.0.14",
     "jsr:@std/path@^1.1.5": "1.1.6",
     "jsr:@std/path@^1.1.6": "1.1.6",
-    "jsr:@std/semver@^1.0.8": "1.0.8",
     "npm:@remix-run/mime@~0.4.2": "0.4.2",
     "npm:html-rewriter-wasm@~0.4.1": "0.4.1",
     "npm:lightningcss@^1.33.0": "1.33.0"
@@ -23,8 +22,8 @@
     "@cfa/gitignore-parser@0.1.4": {
       "integrity": "60d3563bbd7b8797f50c28585d7d74d231fbb56a1d9df7b0673c27cbdf60a23a"
     },
-    "@flint/framework@0.40.1": {
-      "integrity": "aa263751be9c17c8e96337ca0f451d67c819289bc281cec4e673348552b57100",
+    "@flint/framework@0.41.0": {
+      "integrity": "f6310fe2e8e46732a973bd244ee1480a23cd0b8b7c272378a52f25d8443d0165",
       "dependencies": [
         "jsr:@cfa/gitignore-parser",
         "jsr:@std/async",
@@ -34,7 +33,6 @@
         "jsr:@std/fs",
         "jsr:@std/http",
         "jsr:@std/path@^1.1.6",
-        "jsr:@std/semver",
         "npm:@remix-run/mime",
         "npm:html-rewriter-wasm",
         "npm:lightningcss"
@@ -82,9 +80,6 @@
       "dependencies": [
         "jsr:@std/internal"
       ]
-    },
-    "@std/semver@1.0.8": {
-      "integrity": "dc830e8b8b6a380c895d53fbfd1258dc253704ca57bbe1629ac65fd7830179b7"
     }
   },
   "npm": {
@@ -174,7 +169,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@flint/framework@~0.40.1",
+      "jsr:@flint/framework@0.41",
       "jsr:@handcraft/lib@^4.7.1"
     ]
   }
