@@ -17,7 +17,7 @@
     "@flint/framework": "jsr:@flint/framework@^0.42.1",
     "@handcraft/lib": "jsr:@handcraft/lib@^4.7.1"
   },
-  "unstable": ["bundle", "raw-imports"],
+  "unstable": ["bundle"],
   "compilerOptions": {
     "lib": ["deno.ns", "deno.unstable", "dom", "dom.iterable", "es2025"]
   }
