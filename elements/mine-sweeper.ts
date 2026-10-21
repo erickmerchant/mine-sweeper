@@ -1,4 +1,13 @@
-import { h, HandcraftElement, type HandcraftNode, watch } from "@handcraft/lib";
+import type { HandcraftNode, HandcraftTag } from "@handcraft/lib";
+import { watch } from "@handcraft/lib/reactivity";
+import { HandcraftElementWithAttributes } from "@handcraft/lib/element";
+import { html } from "@handcraft/lib/h";
+import attr from "@handcraft/lib/attr";
+import on from "@handcraft/lib/on";
+import effect from "@handcraft/lib/effect";
+import tokens from "@handcraft/lib/tokens";
+import text from "@handcraft/lib/text";
+import shadow from "@handcraft/lib/shadow";
 
 type Square = {
   x: number;
@@ -9,15 +18,13 @@ type Square = {
   adjacent: Array<Square>;
 };
 
-const { div, style, button } = h.html;
-
 const PLAY_STATES = {
   PLAYING: 0,
   LOST: 1,
   WON: 2,
 };
 
-export class MineSweeper extends HandcraftElement {
+export class MineSweeper extends HandcraftElementWithAttributes {
   static observedAttributes = ["height", "width", "count"];
 
   height = 8;
@@ -284,45 +291,51 @@ export class MineSweeper extends HandcraftElement {
       }
     };
 
-    return div
-      .role("gridcell")
-      .aria("colindex", col + 1)(
-        button.on("click touchend", revealSquare)
-          .on("mousedown touchstart", toggleFlagDelayed)
-          .on("contextmenu", toggleFlagImmediately)
-          .on("keydown", moveFocus as EventListener)
-          .type("button")
-          .aria("label", () => (square.isRevealed ? null : "Hidden"))
-          .part("btn", {
-            revealed: () => square.isRevealed,
-            flagged: () => square.isFlagged,
-            ...range(8).reduce<Record<string, () => boolean>>(
-              (classes, i) => {
-                classes[`armed-adjacent-count--${i}`] = () =>
-                  square.adjacent.filter((square) => square.isArmed)
-                    .length === i;
+    return html.div(
+      attr.role("gridcell"),
+      attr["aria-colindex"](col + 1),
+      html.button(
+        on.click(revealSquare),
+        on.touchend(revealSquare),
+        on.mousedown(toggleFlagDelayed),
+        on.touchstart(toggleFlagDelayed),
+        on.contextmenu(toggleFlagImmediately),
+        on.keydown(moveFocus as EventListener),
+        attr.type("button"),
+        attr["aria-label"](() => (square.isRevealed ? null : "Hidden")),
+        attr.part(tokens({
+          btn: true,
+          revealed: () => square.isRevealed,
+          flagged: () => square.isFlagged,
+          ...range(8).reduce<Record<string, () => boolean>>(
+            (classes, i) => {
+              classes[`armed-adjacent-count--${i}`] = () =>
+                square.adjacent.filter((square) => square.isArmed)
+                  .length === i;
 
-                return classes;
-              },
-              {},
-            ),
-          })
-          .effect(focus)(() => {
-            if (!square.isRevealed) {
-              return square.isFlagged ? "🚩" : "";
-            } else {
-              return square.isFlagged && !square.isArmed
-                ? "❌"
-                : square.isArmed
-                ? "💥"
-                : `${
-                  square.adjacent.filter((square) => square.isArmed)
-                    .length ||
-                  ""
-                }`;
-            }
-          }),
-      );
+              return classes;
+            },
+            {},
+          ),
+        })),
+        effect(focus),
+        text(() => {
+          if (!square.isRevealed) {
+            return square.isFlagged ? "🚩" : "";
+          } else {
+            return square.isFlagged && !square.isArmed
+              ? "❌"
+              : square.isArmed
+              ? "💥"
+              : `${
+                square.adjacent.filter((square) => square.isArmed)
+                  .length ||
+                ""
+              }`;
+          }
+        }),
+      ),
+    );
   }
 
   updateTime = (): void => {
@@ -331,7 +344,7 @@ export class MineSweeper extends HandcraftElement {
       : 0;
   };
 
-  override view(host: HandcraftNode) {
+  override view(host: HandcraftTag): HandcraftNode {
     this.state.flags = this.count;
     this.state.hiddenCount = this.height * this.width;
     this.state.playState = PLAY_STATES.PLAYING;
@@ -340,36 +353,43 @@ export class MineSweeper extends HandcraftElement {
     this.startTime = null;
     this.timeInterval = null;
 
-    host.shadow({ mode: "open" }, [
-      style(() =>
-        `:host { --width: ${this.width}; --height: ${this.height}; }`
-      ),
-      div.part("info-panel")(
-        div(() => `🚩 ${this.state.flags}`),
-        div.aria("live", "polite")(() =>
-          ["", "💀", "🎉"][this.state.playState]
-        ),
-        div(() => `${this.state.time} ⏱️`),
-      ),
-      div
-        .aria("rowcount", this.height)
-        .aria("colcount", this.width)
-        .role("grid")
-        .part("grid")(
-          ...range(this.height).map((row) =>
-            div
-              .aria("rowindex", row + 1)
-              .role("row")
-              .part("row")(
-                ...range(this.width).map((col) => this.cell(row, col)),
-              )
+    return host(
+      shadow(
+        { mode: "open" },
+        html.style(
+          text(() =>
+            `:host { --width: ${this.width}; --height: ${this.height}; }`
           ),
         ),
-    ]);
+        html.div(
+          attr.part("info-panel"),
+          html.div(text(() => `🚩 ${this.state.flags}`)),
+          html.div(
+            attr["aria-live"]("polite"),
+            text(() => ["", "💀", "🎉"][this.state.playState]),
+          ),
+          html.div(text(() => `${this.state.time} ⏱️`)),
+        ),
+        html.div(
+          attr["aria-rowcount"](this.height),
+          attr["aria-colcount"](this.width),
+          attr.role("grid"),
+          attr.part("grid"),
+          ...range(this.height).map((row) =>
+            html.div(
+              attr["aria-rowindex"](row + 1),
+              attr.role("row"),
+              attr.part("row"),
+              ...range(this.width).map((col) => this.cell(row, col)),
+            )
+          ),
+        ),
+      ),
+    );
   }
 }
 
-export default MineSweeper.define("mine-sweeper") as HandcraftNode;
+export default MineSweeper.define("mine-sweeper") as HandcraftTag;
 
 function range(n: number): Array<number> {
   return [...Array(n).keys()];
