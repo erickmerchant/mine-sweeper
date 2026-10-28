@@ -3,6 +3,7 @@ import { watch } from "@handcraft/lib/reactivity";
 import { HandcraftElementWithAttributes } from "@handcraft/lib/element";
 import { html } from "@handcraft/lib/h";
 import attr from "@handcraft/lib/attr";
+import aria from "@handcraft/lib/aria";
 import on from "@handcraft/lib/on";
 import effect from "@handcraft/lib/effect";
 import tokens from "@handcraft/lib/tokens";
@@ -293,7 +294,7 @@ export class MineSweeper extends HandcraftElementWithAttributes {
 
     return html.div(
       attr.role("gridcell"),
-      attr["aria-colindex"](col + 1),
+      aria.colindex(col + 1),
       html.button(
         on.click(revealSquare),
         on.touchend(revealSquare),
@@ -302,7 +303,7 @@ export class MineSweeper extends HandcraftElementWithAttributes {
         on.contextmenu(toggleFlagImmediately),
         on.keydown(moveFocus as EventListener),
         attr.type("button"),
-        attr["aria-label"](() => (square.isRevealed ? null : "Hidden")),
+        aria.label(() => (square.isRevealed ? null : "Hidden")),
         attr.part(tokens({
           btn: true,
           revealed: () => square.isRevealed,
@@ -365,19 +366,19 @@ export class MineSweeper extends HandcraftElementWithAttributes {
           attr.part("info-panel"),
           html.div(text(() => `🚩 ${this.state.flags}`)),
           html.div(
-            attr["aria-live"]("polite"),
+            aria.live("polite"),
             text(() => ["", "💀", "🎉"][this.state.playState]),
           ),
           html.div(text(() => `${this.state.time} ⏱️`)),
         ),
         html.div(
-          attr["aria-rowcount"](this.height),
-          attr["aria-colcount"](this.width),
+          aria.rowcount(this.height),
+          aria.colcount(this.width),
           attr.role("grid"),
           attr.part("grid"),
           ...range(this.height).map((row) =>
             html.div(
-              attr["aria-rowindex"](row + 1),
+              aria.rowindex(row + 1),
               attr.role("row"),
               attr.part("row"),
               ...range(this.width).map((col) => this.cell(row, col)),

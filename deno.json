@@ -1,12 +1,12 @@
 {
   "name": "@erickmerchant/mine-sweeper",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "license": "MIT",
   "exports": {
     ".": "./elements/mine-sweeper.ts"
   },
   "tasks": {
-    "dev": "deno run -A --watch-hmr flint.ts --port=4000",
+    "dev": "deno run -A --watch-hmr flint.ts --port=4000 --dev",
     "build": "deno run -A flint.ts --build",
     "stage": {
       "command": "deno serve -A --port=4000 --parallel dist/serve.ts",
@@ -14,8 +14,8 @@
     }
   },
   "imports": {
-    "@flint/framework": "jsr:@flint/framework@^0.42.2",
-    "@handcraft/lib": "jsr:@handcraft/lib@^5.1.1"
+    "@flint/framework": "jsr:@flint/framework@^0.43.0",
+    "@handcraft/lib": "jsr:@handcraft/lib@^5.2.0"
   },
   "unstable": ["bundle"],
   "compilerOptions": {

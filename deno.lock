@@ -2,8 +2,8 @@
   "version": "5",
   "specifiers": {
     "jsr:@cfa/gitignore-parser@~0.1.4": "0.1.4",
-    "jsr:@flint/framework@~0.42.2": "0.42.2",
-    "jsr:@handcraft/lib@^5.1.1": "5.1.1",
+    "jsr:@flint/framework@0.43": "0.43.0",
+    "jsr:@handcraft/lib@^5.2.0": "5.2.0",
     "jsr:@std/async@^1.5.1": "1.5.1",
     "jsr:@std/cli@^1.0.32": "1.0.32",
     "jsr:@std/crypto@^1.1.0": "1.1.0",
@@ -16,14 +16,15 @@
     "jsr:@std/path@^1.1.6": "1.1.6",
     "npm:@remix-run/mime@1": "1.0.0",
     "npm:html-rewriter-wasm@~0.4.1": "0.4.1",
-    "npm:lightningcss@^1.33.0": "1.33.0"
+    "npm:lightningcss@^1.33.0": "1.33.0",
+    "npm:terser@^5.51.2": "5.51.2"
   },
   "jsr": {
     "@cfa/gitignore-parser@0.1.4": {
       "integrity": "60d3563bbd7b8797f50c28585d7d74d231fbb56a1d9df7b0673c27cbdf60a23a"
     },
-    "@flint/framework@0.42.2": {
-      "integrity": "6c23311eb070cf99084cf5b9269d33689bb789f8cd6c1e859bb36a25cf7c9902",
+    "@flint/framework@0.43.0": {
+      "integrity": "f5b698ed6e7acd392eb03331a1ee1625a6937c785b0eb89685622568cdca49fe",
       "dependencies": [
         "jsr:@cfa/gitignore-parser",
         "jsr:@std/async",
@@ -35,11 +36,12 @@
         "jsr:@std/path@^1.1.6",
         "npm:@remix-run/mime",
         "npm:html-rewriter-wasm",
-        "npm:lightningcss"
+        "npm:lightningcss",
+        "npm:terser"
       ]
     },
-    "@handcraft/lib@5.1.1": {
-      "integrity": "118259c369f95ea763d8cd29f660a03f97ba5b38c845033eaddb51ff1f41c682",
+    "@handcraft/lib@5.2.0": {
+      "integrity": "f9235d166f3a0ec0439108eae86520bb8ab176fea5afca9849c499d40a7d7485",
       "dependencies": [
         "jsr:@std/html"
       ]
@@ -83,8 +85,45 @@
     }
   },
   "npm": {
+    "@jridgewell/gen-mapping@0.3.13": {
+      "integrity": "sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==",
+      "dependencies": [
+        "@jridgewell/sourcemap-codec",
+        "@jridgewell/trace-mapping"
+      ]
+    },
+    "@jridgewell/resolve-uri@3.1.2": {
+      "integrity": "sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw=="
+    },
+    "@jridgewell/source-map@0.3.11": {
+      "integrity": "sha512-ZMp1V8ZFcPG5dIWnQLr3NSI1MiCU7UETdS/A0G8V/XWHvJv3ZsFqutJn1Y5RPmAPX6F3BiE397OqveU/9NCuIA==",
+      "dependencies": [
+        "@jridgewell/gen-mapping",
+        "@jridgewell/trace-mapping"
+      ]
+    },
+    "@jridgewell/sourcemap-codec@1.6.0": {
+      "integrity": "sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw=="
+    },
+    "@jridgewell/trace-mapping@0.3.31": {
+      "integrity": "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==",
+      "dependencies": [
+        "@jridgewell/resolve-uri",
+        "@jridgewell/sourcemap-codec"
+      ]
+    },
     "@remix-run/mime@1.0.0": {
       "integrity": "sha512-oOPL/TMsNIbfNpSzjtZhTmIeqfgCYM3mQOYs13UsHKTmgLRgKfiNz4B1q/SN3juhCrtPwDwjwUEx1Vn8vp9SEg=="
+    },
+    "acorn@8.18.0": {
+      "integrity": "sha512-lGq+9yr1/GuAWaVYIHRjvvySG5/4VfKIvC8EWxStPdcDh/Ka7FG3twP6v4d5BkravUilhIAsG4Qj83t02LWUPQ==",
+      "bin": true
+    },
+    "buffer-from@1.1.2": {
+      "integrity": "sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ=="
+    },
+    "commander@2.20.3": {
+      "integrity": "sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ=="
     },
     "detect-libc@2.1.2": {
       "integrity": "sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ=="
@@ -165,12 +204,32 @@
         "lightningcss-win32-arm64-msvc",
         "lightningcss-win32-x64-msvc"
       ]
+    },
+    "source-map-support@0.5.21": {
+      "integrity": "sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==",
+      "dependencies": [
+        "buffer-from",
+        "source-map"
+      ]
+    },
+    "source-map@0.6.1": {
+      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g=="
+    },
+    "terser@5.51.2": {
+      "integrity": "sha512-bWnjSNscmuI+GJze6ZupnHP8G/cTcsJF+bXCeQknk2SHQsgbNJnLrqiH9jZ2W4STPVXH2mDKKRX3iwPhc9Cn/Q==",
+      "dependencies": [
+        "@jridgewell/source-map",
+        "acorn",
+        "commander",
+        "source-map-support"
+      ],
+      "bin": true
     }
   },
   "workspace": {
     "dependencies": [
-      "jsr:@flint/framework@~0.42.2",
-      "jsr:@handcraft/lib@^5.1.1"
+      "jsr:@flint/framework@0.43",
+      "jsr:@handcraft/lib@^5.2.0"
     ]
   }
 }
