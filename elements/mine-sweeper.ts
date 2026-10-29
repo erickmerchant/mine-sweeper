@@ -302,8 +302,8 @@ export class MineSweeper extends HandcraftElementWithAttributes {
         on.touchstart(toggleFlagDelayed),
         on.contextmenu(toggleFlagImmediately),
         on.keydown(moveFocus as EventListener),
-        attr.type("button"),
         aria.label(() => (square.isRevealed ? null : "Hidden")),
+        attr.type("button"),
         attr.part(tokens({
           btn: true,
           revealed: () => square.isRevealed,
