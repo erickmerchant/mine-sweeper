@@ -1,7 +1,7 @@
-import type { HandcraftNode, HandcraftTag } from "@handcraft/lib";
+import type { HandcraftNode, HandcraftTag } from "@handcraft/lib/types";
 import { watch } from "@handcraft/lib/reactivity";
 import { HandcraftElementWithAttributes } from "@handcraft/lib/element";
-import { html } from "@handcraft/lib/h";
+import html from "@handcraft/lib/html";
 import attr from "@handcraft/lib/attr";
 import aria from "@handcraft/lib/aria";
 import on from "@handcraft/lib/on";
@@ -28,17 +28,19 @@ const PLAY_STATES = {
 export class MineSweeper extends HandcraftElementWithAttributes {
   static observedAttributes = ["height", "width", "count"];
 
-  height = 8;
-  width = 8;
-  count = 10;
-
-  state: {
+  override state: {
+    height: number;
+    width: number;
+    count: number;
     playState: number;
     time: number;
     hasFocus: Array<number>;
     flags: number;
     hiddenCount: number;
   } = watch({
+    height: 8,
+    width: 8,
+    count: 10,
     playState: PLAY_STATES.PLAYING,
     time: 0,
     hasFocus: [],
@@ -94,21 +96,21 @@ export class MineSweeper extends HandcraftElementWithAttributes {
       },
     };
 
-    this.gameBoard.set(row * this.width + col, square);
+    this.gameBoard.set(row * this.state.width + col, square);
 
     const keys = [
-      (row - 1) * this.width + col,
+      (row - 1) * this.state.width + col,
     ];
 
     if (col - 1 >= 0) {
       keys.push(
-        (row - 1) * this.width + (col - 1),
-        row * this.width + (col - 1),
+        (row - 1) * this.state.width + (col - 1),
+        row * this.state.width + (col - 1),
       );
     }
 
-    if (col + 1 <= this.width - 1) {
-      keys.push((row - 1) * this.width + (col + 1));
+    if (col + 1 <= this.state.width - 1) {
+      keys.push((row - 1) * this.state.width + (col + 1));
     }
 
     for (const key of keys) {
@@ -135,7 +137,7 @@ export class MineSweeper extends HandcraftElementWithAttributes {
 
       armed.sort((a, b) => a.order - b.order);
 
-      armed = armed.splice(0, this.count);
+      armed = armed.splice(0, this.state.count);
 
       for (const { square } of armed) {
         square.isArmed = true;
@@ -155,7 +157,7 @@ export class MineSweeper extends HandcraftElementWithAttributes {
         return;
       }
 
-      if (this.state.hiddenCount === this.height * this.width) {
+      if (this.state.hiddenCount === this.state.height * this.state.width) {
         arm();
       }
 
@@ -211,7 +213,7 @@ export class MineSweeper extends HandcraftElementWithAttributes {
               } while (current.length > 0);
             }
 
-            if (this.state.hiddenCount === this.count) {
+            if (this.state.hiddenCount === this.state.count) {
               this.state.playState = PLAY_STATES.WON;
 
               for (const square of this.gameBoard.values()) {
@@ -268,15 +270,15 @@ export class MineSweeper extends HandcraftElementWithAttributes {
     const moveFocus = (e: KeyboardEvent) => {
       const keys: Record<string, Array<number>> = {
         ArrowUp: row > 0 ? [col, row - 1] : [],
-        ArrowDown: row < this.height - 1 ? [col, row + 1] : [],
+        ArrowDown: row < this.state.height - 1 ? [col, row + 1] : [],
         ArrowLeft: col > 0
           ? [col - 1, row]
           : row > 0
-          ? [this.width - 1, row - 1]
+          ? [this.state.width - 1, row - 1]
           : [],
-        ArrowRight: col < this.width - 1
+        ArrowRight: col < this.state.width - 1
           ? [col + 1, row]
-          : row < this.height - 1
+          : row < this.state.height - 1
           ? [0, row + 1]
           : [],
       };
@@ -346,8 +348,8 @@ export class MineSweeper extends HandcraftElementWithAttributes {
   };
 
   override view(host: HandcraftTag): HandcraftNode {
-    this.state.flags = this.count;
-    this.state.hiddenCount = this.height * this.width;
+    this.state.flags = this.state.count;
+    this.state.hiddenCount = this.state.height * this.state.width;
     this.state.playState = PLAY_STATES.PLAYING;
     this.state.time = 0;
     this.state.hasFocus = [];
@@ -359,7 +361,7 @@ export class MineSweeper extends HandcraftElementWithAttributes {
         { mode: "open" },
         html.style(
           text(() =>
-            `:host { --width: ${this.width}; --height: ${this.height}; }`
+            `:host { --width: ${this.state.width}; --height: ${this.state.height}; }`
           ),
         ),
         html.div(
@@ -372,16 +374,16 @@ export class MineSweeper extends HandcraftElementWithAttributes {
           html.div(text(() => `${this.state.time} ⏱️`)),
         ),
         html.div(
-          aria.rowcount(this.height),
-          aria.colcount(this.width),
+          aria.rowcount(this.state.height),
+          aria.colcount(this.state.width),
           attr.role("grid"),
           attr.part("grid"),
-          ...range(this.height).map((row) =>
+          ...range(this.state.height).map((row) =>
             html.div(
               aria.rowindex(row + 1),
               attr.role("row"),
               attr.part("row"),
-              ...range(this.width).map((col) => this.cell(row, col)),
+              ...range(this.state.width).map((col) => this.cell(row, col)),
             )
           ),
         ),

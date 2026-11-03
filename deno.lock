@@ -2,8 +2,8 @@
   "version": "5",
   "specifiers": {
     "jsr:@cfa/gitignore-parser@~0.1.4": "0.1.4",
-    "jsr:@flint/framework@0.43": "0.43.0",
-    "jsr:@handcraft/lib@^5.2.0": "5.2.0",
+    "jsr:@flint/framework@0.44": "0.44.0",
+    "jsr:@handcraft/lib@6": "6.0.0",
     "jsr:@std/async@^1.5.1": "1.5.1",
     "jsr:@std/cli@^1.0.32": "1.0.32",
     "jsr:@std/crypto@^1.1.0": "1.1.0",
@@ -23,8 +23,8 @@
     "@cfa/gitignore-parser@0.1.4": {
       "integrity": "60d3563bbd7b8797f50c28585d7d74d231fbb56a1d9df7b0673c27cbdf60a23a"
     },
-    "@flint/framework@0.43.0": {
-      "integrity": "f5b698ed6e7acd392eb03331a1ee1625a6937c785b0eb89685622568cdca49fe",
+    "@flint/framework@0.44.0": {
+      "integrity": "cf19b9a23cb2398109c2611c9e009dca1b95845ebab5e3b8c061f1ccf8a83453",
       "dependencies": [
         "jsr:@cfa/gitignore-parser",
         "jsr:@std/async",
@@ -40,8 +40,8 @@
         "npm:terser"
       ]
     },
-    "@handcraft/lib@5.2.0": {
-      "integrity": "f9235d166f3a0ec0439108eae86520bb8ab176fea5afca9849c499d40a7d7485",
+    "@handcraft/lib@6.0.0": {
+      "integrity": "923fdd02be4c5a5198fea9a70126902a14a69de4a84639531eeae1bb7a7a32f7",
       "dependencies": [
         "jsr:@std/html"
       ]
@@ -115,8 +115,8 @@
     "@remix-run/mime@1.0.0": {
       "integrity": "sha512-oOPL/TMsNIbfNpSzjtZhTmIeqfgCYM3mQOYs13UsHKTmgLRgKfiNz4B1q/SN3juhCrtPwDwjwUEx1Vn8vp9SEg=="
     },
-    "acorn@8.18.0": {
-      "integrity": "sha512-lGq+9yr1/GuAWaVYIHRjvvySG5/4VfKIvC8EWxStPdcDh/Ka7FG3twP6v4d5BkravUilhIAsG4Qj83t02LWUPQ==",
+    "acorn@8.19.0": {
+      "integrity": "sha512-oJlA3XiRm7Cyk6qFD2Jn8ak9B7jSy0qy00ADO3+8dpT0LSjFihQYv4C02LFCSYJV3Q37xYwwRy5m+IpIiUzqWw==",
       "bin": true
     },
     "buffer-from@1.1.2": {
@@ -228,8 +228,8 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@flint/framework@0.43",
-      "jsr:@handcraft/lib@^5.2.0"
+      "jsr:@flint/framework@0.44",
+      "jsr:@handcraft/lib@6"
     ]
   }
 }

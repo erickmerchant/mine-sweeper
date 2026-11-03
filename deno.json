@@ -1,6 +1,6 @@
 {
   "name": "@erickmerchant/mine-sweeper",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "license": "MIT",
   "exports": {
     ".": "./elements/mine-sweeper.ts"
@@ -14,8 +14,8 @@
     }
   },
   "imports": {
-    "@flint/framework": "jsr:@flint/framework@^0.43.0",
-    "@handcraft/lib": "jsr:@handcraft/lib@^5.2.0"
+    "@flint/framework": "jsr:@flint/framework@^0.44.0",
+    "@handcraft/lib": "jsr:@handcraft/lib@^6.0.0"
   },
   "unstable": ["bundle"],
   "compilerOptions": {
