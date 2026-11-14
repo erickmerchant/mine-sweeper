@@ -147,7 +147,11 @@ export class MineSweeper extends HandcraftElementWithAttributes {
 
       this.startTime = Date.now();
       this.timeInterval = setInterval(
-        this.updateTime,
+        (): void => {
+          this.state.time = this.startTime
+            ? Math.floor((Date.now() - this.startTime) / 1_000)
+            : 0;
+        },
         250,
       ) as unknown as number;
     };
@@ -340,12 +344,6 @@ export class MineSweeper extends HandcraftElementWithAttributes {
       ),
     );
   }
-
-  updateTime = (): void => {
-    this.state.time = this.startTime
-      ? Math.floor((Date.now() - this.startTime) / 1_000)
-      : 0;
-  };
 
   override view(host: HandcraftTag): HandcraftNode {
     this.state.flags = this.state.count;
