@@ -2,7 +2,7 @@
   "version": "5",
   "specifiers": {
     "jsr:@cfa/gitignore-parser@~0.1.4": "0.1.4",
-    "jsr:@flint/framework@0.44": "0.44.0",
+    "jsr:@flint/framework@~0.44.1": "0.44.1",
     "jsr:@handcraft/lib@^6.2.0": "6.2.0",
     "jsr:@std/async@^1.5.1": "1.5.1",
     "jsr:@std/cli@^1.0.32": "1.0.32",
@@ -17,14 +17,14 @@
     "npm:@remix-run/mime@1": "1.0.0",
     "npm:html-rewriter-wasm@~0.4.1": "0.4.1",
     "npm:lightningcss@^1.33.0": "1.33.0",
-    "npm:terser@^5.51.2": "5.51.2"
+    "npm:terser@^5.51.4": "5.51.4"
   },
   "jsr": {
     "@cfa/gitignore-parser@0.1.4": {
       "integrity": "60d3563bbd7b8797f50c28585d7d74d231fbb56a1d9df7b0673c27cbdf60a23a"
     },
-    "@flint/framework@0.44.0": {
-      "integrity": "cf19b9a23cb2398109c2611c9e009dca1b95845ebab5e3b8c061f1ccf8a83453",
+    "@flint/framework@0.44.1": {
+      "integrity": "80b64df00e2d49b83009759248869db6e802f769bc417276e7da8054a56674a0",
       "dependencies": [
         "jsr:@cfa/gitignore-parser",
         "jsr:@std/async",
@@ -215,8 +215,8 @@
     "source-map@0.6.1": {
       "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g=="
     },
-    "terser@5.51.2": {
-      "integrity": "sha512-bWnjSNscmuI+GJze6ZupnHP8G/cTcsJF+bXCeQknk2SHQsgbNJnLrqiH9jZ2W4STPVXH2mDKKRX3iwPhc9Cn/Q==",
+    "terser@5.51.4": {
+      "integrity": "sha512-VPi1CkDvCWLGUVIToctNBG+NdHbSXwOPjHJnQ3pdB0XknaldnI76wSkAFOGxV2ZdkzOP5d6gpQ5c58XvDghRvw==",
       "dependencies": [
         "@jridgewell/source-map",
         "acorn",
@@ -228,7 +228,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@flint/framework@0.44",
+      "jsr:@flint/framework@~0.44.1",
       "jsr:@handcraft/lib@^6.2.0"
     ]
   }

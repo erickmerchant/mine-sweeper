@@ -12,10 +12,17 @@ export default function () {
       html.title(text("Mine-Sweeper")),
       html.link(attr.rel("stylesheet"), attr.href("/styles/index.css")),
       html.script(attr.type("module"), attr.src("/elements/mine-sweeper.js")),
+      html.link(
+        attr.href("data:image/x-icon;,"),
+        attr.rel("shortcut icon"),
+        attr.type("image/x-icon"),
+      ),
     ),
     html.body(
-      attr.class("page"),
-      mineSweeper(attr.height(8), attr.width(8), attr.count(10)),
+      html.main(
+        attr.class("page"),
+        mineSweeper(attr.height(8), attr.width(8), attr.count(10)),
+      ),
     ),
   );
 }
