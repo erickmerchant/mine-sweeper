@@ -62,43 +62,43 @@
       cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
+
+      @container style(--armed-adjacent-count: 1) {
+        color: oklch(50% 0.4 260);
+      }
+
+      @container style(--armed-adjacent-count: 2) {
+        color: oklch(50% 0.4 215);
+      }
+
+      @container style(--armed-adjacent-count: 3) {
+        color: oklch(50% 0.4 170);
+      }
+
+      @container style(--armed-adjacent-count: 4) {
+        color: oklch(50% 0.4 125);
+      }
+
+      @container style(--armed-adjacent-count: 5) {
+        color: oklch(50% 0.4 80);
+      }
+
+      @container style(--armed-adjacent-count: 6) {
+        color: oklch(50% 0.4 35);
+      }
+
+      @container style(--armed-adjacent-count: 7) {
+        color: oklch(50% 0.4 350);
+      }
+
+      @container style(--armed-adjacent-count: 8) {
+        color: oklch(50% 0.4 305);
+      }
     }
 
     &::part(revealed) {
       background-color: oklch(95% 0 0);
       cursor: oklch(90% 0 0);
-    }
-
-    &::part(armed-adjacent-count--1) {
-      color: oklch(50% 0.4 260);
-    }
-
-    &::part(armed-adjacent-count--2) {
-      color: oklch(50% 0.4 215);
-    }
-
-    &::part(armed-adjacent-count--3) {
-      color: oklch(50% 0.4 170);
-    }
-
-    &::part(armed-adjacent-count--4) {
-      color: oklch(50% 0.4 125);
-    }
-
-    &::part(armed-adjacent-count--5) {
-      color: oklch(50% 0.4 80);
-    }
-
-    &::part(armed-adjacent-count--6) {
-      color: oklch(50% 0.4 35);
-    }
-
-    &::part(armed-adjacent-count--7) {
-      color: oklch(50% 0.4 350);
-    }
-
-    &::part(armed-adjacent-count--8) {
-      color: oklch(50% 0.4 305);
     }
 
     &:part(flagged revealed) {

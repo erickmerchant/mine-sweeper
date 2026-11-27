@@ -10,14 +10,24 @@ import tokens from "@handcraft/lib/tokens";
 import text from "@handcraft/lib/text";
 import shadow from "@handcraft/lib/shadow";
 
+const IS_ARMED = 0b001;
+const IS_REVEALED = 0b010;
+const IS_FLAGGED = 0b100;
+
 type Square = {
   x: number;
   y: number;
-  isFlagged: boolean;
-  isRevealed: boolean;
-  isArmed: boolean;
+  squareState: number;
   adjacent: Array<Square>;
 };
+
+function squareIs(square: Square, mask: number) {
+  return !!(square.squareState & mask);
+}
+
+function squareAdjacentCount(square: Square, mask: number) {
+  return square.adjacent.filter((a) => a.squareState & mask).length;
+}
 
 const PLAY_STATES = {
   PLAYING: 0,
@@ -64,10 +74,7 @@ export class MineSweeper extends HandcraftElementWithAttributes {
       const square = watch<Square>({
         x: col,
         y: row,
-        isFlagged: false,
-        isRevealed: false,
-        isArmed: false,
-
+        squareState: 0,
         adjacent: [],
       });
 
@@ -147,7 +154,7 @@ export class MineSweeper extends HandcraftElementWithAttributes {
         armed = armed.splice(0, attributes.count);
 
         for (const { square } of armed) {
-          square.isArmed = true;
+          square.squareState |= IS_ARMED;
         }
 
         state.playState = PLAY_STATES.PLAYING;
@@ -173,12 +180,12 @@ export class MineSweeper extends HandcraftElementWithAttributes {
         }
 
         longPress.cancel(() => {
-          if (!square.isFlagged && !square.isRevealed) {
-            square.isRevealed = true;
+          if (!squareIs(square, IS_FLAGGED | IS_REVEALED)) {
+            square.squareState |= IS_REVEALED;
 
             state.hiddenCount -= 1;
 
-            if (square.isArmed) {
+            if (squareIs(square, IS_ARMED)) {
               state.playState = PLAY_STATES.LOST;
 
               if (timeInterval) {
@@ -186,14 +193,12 @@ export class MineSweeper extends HandcraftElementWithAttributes {
               }
 
               for (const square of gameBoard.values()) {
-                if (!square.isFlagged || !square.isArmed) {
-                  square.isRevealed = true;
-                }
+                square.squareState |= IS_REVEALED;
               }
             } else {
               if (
-                !square.isFlagged &&
-                !square.adjacent.some((square) => square.isArmed)
+                !squareIs(square, IS_FLAGGED) &&
+                squareAdjacentCount(square, IS_ARMED) === 0
               ) {
                 let current = square.adjacent;
 
@@ -201,20 +206,18 @@ export class MineSweeper extends HandcraftElementWithAttributes {
                   const next = [];
 
                   for (const sq of current) {
-                    if (!sq || sq.isRevealed) {
+                    if (!sq || squareIs(sq, IS_REVEALED)) {
                       continue;
                     }
 
                     if (
-                      !sq.isArmed &&
-                      !sq.isFlagged &&
-                      !sq.isRevealed
+                      !sq.squareState
                     ) {
-                      sq.isRevealed = true;
+                      sq.squareState |= IS_REVEALED;
 
                       state.hiddenCount -= 1;
 
-                      if (!sq.adjacent.some((square) => square.isArmed)) {
+                      if (squareAdjacentCount(sq, IS_ARMED) === 0) {
                         next.push(...sq.adjacent);
                       }
                     }
@@ -228,11 +231,11 @@ export class MineSweeper extends HandcraftElementWithAttributes {
                 state.playState = PLAY_STATES.WON;
 
                 for (const square of gameBoard.values()) {
-                  if (!square.isFlagged) {
-                    if (square.isArmed) {
-                      square.isFlagged = true;
+                  if (!squareIs(square, IS_FLAGGED)) {
+                    if (squareIs(square, IS_ARMED)) {
+                      square.squareState |= IS_FLAGGED;
                     } else {
-                      square.isRevealed = true;
+                      square.squareState |= IS_REVEALED;
                     }
                   }
                 }
@@ -254,10 +257,10 @@ export class MineSweeper extends HandcraftElementWithAttributes {
             return;
           }
 
-          if (!square.isRevealed) {
-            square.isFlagged = !square.isFlagged;
+          if (!squareIs(square, IS_REVEALED)) {
+            square.squareState ^= IS_FLAGGED;
 
-            state.flags += square.isFlagged ? -1 : 1;
+            state.flags += squareIs(square, IS_FLAGGED) ? -1 : 1;
           }
         });
       };
@@ -270,10 +273,10 @@ export class MineSweeper extends HandcraftElementWithAttributes {
         }
 
         longPress.cancel(() => {
-          if (!square.isRevealed) {
-            square.isFlagged = !square.isFlagged;
+          if (!squareIs(square, IS_REVEALED)) {
+            square.squareState ^= IS_FLAGGED;
 
-            state.flags += square.isFlagged ? -1 : 1;
+            state.flags += squareIs(square, IS_FLAGGED) ? -1 : 1;
           }
         });
       };
@@ -307,6 +310,9 @@ export class MineSweeper extends HandcraftElementWithAttributes {
 
       return html.div(
         attr.role("gridcell"),
+        attr.style(() =>
+          `--armed-adjacent-count: ${squareAdjacentCount(square, IS_ARMED)}`
+        ),
         aria.colindex(col + 1),
         html.button(
           on.click(revealSquare),
@@ -315,38 +321,30 @@ export class MineSweeper extends HandcraftElementWithAttributes {
           on.touchstart(toggleFlagDelayed),
           on.contextmenu(toggleFlagImmediately),
           on.keydown(moveFocus as EventListener),
-          aria.label(() => (square.isRevealed ? null : "Hidden")),
+          aria.label(
+            () => (squareIs(square, IS_REVEALED) ? null : "Hidden"),
+          ),
           attr.type("button"),
           attr.part(tokens({
             btn: true,
-            revealed: () => square.isRevealed,
-            flagged: () => square.isFlagged,
-            ...range(8).reduce<Record<string, () => boolean>>(
-              (classes, i) => {
-                classes[`armed-adjacent-count--${i}`] = () =>
-                  square.adjacent.filter((square) => square.isArmed)
-                    .length === i;
-
-                return classes;
-              },
-              {},
-            ),
+            revealed: () => squareIs(square, IS_REVEALED),
+            flagged: () => squareIs(square, IS_FLAGGED),
           })),
           effect(focus),
           text(() => {
-            if (!square.isRevealed) {
-              return square.isFlagged ? "🚩" : "";
-            } else {
-              return square.isFlagged && !square.isArmed
-                ? "❌"
-                : square.isArmed
-                ? "💥"
-                : `${
-                  square.adjacent.filter((square) => square.isArmed)
-                    .length ||
-                  ""
-                }`;
-            }
+            const [armed, flagged, revealed] = [
+              squareIs(square, IS_ARMED),
+              squareIs(square, IS_FLAGGED),
+              squareIs(square, IS_REVEALED),
+            ];
+
+            if (!revealed && flagged) return "🚩";
+            if (!revealed) return "";
+
+            if (flagged && !armed) return "❌";
+            if (armed) return "💥";
+
+            return "" + (squareAdjacentCount(square, IS_ARMED) || "");
           }),
         ),
       );
